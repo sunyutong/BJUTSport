@@ -67,12 +67,14 @@ public class LoginActivity extends AppCompatActivity {
         final Handler showLoginResultHandler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
+                loginResult.setTextColor(Color.argb(255, 127, 127, 127));
                 switch (msg.what) {
                     case SHOW_LOGIN_SUCCESS_IN_TEXTVIEW:
-                        loginResult.setTextColor(Color.argb(255, 127, 127, 127));
+                        //显示登录成功
                         loginResult.setText("Login success！");
                         break;
                     case SHOW_LOGIN_FAILED_IN_TEXTVIEW:
+                        //显示登录失败
                         loginResult.setText("Login failed, please try again！");
                         break;
                     default:
@@ -86,6 +88,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void handleMessage(Message msg) {
                 if (msg.what == JUMP_TO_USERACTIVITY) {
+                    //跳转到用户界面
                     Intent intent_User = new Intent(LoginActivity.this, UserActivity.class);
                     startActivity(intent_User);
                     finish();

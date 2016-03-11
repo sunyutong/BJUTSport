@@ -24,9 +24,13 @@ import com.bjutspots.aes.AESUtil;
 public class RegisterActivity extends AppCompatActivity {
 
     private static final String AES_KEY = "BJUTSports123456";
-    private static final String URL = "http://192.168.1.101:8080/BJUTSports/services/LoginImplPort";
-    private static final String NAMESPACE = "http://login.bjutsports.com/";
+    private static final String WEBSERVICE_WSDL_URL = "http://192.168.1.101:8080/BJUTSports/services/LoginImplPort";
+    private static final String WEBSERVICE_NAMESPACE = "http://login.bjutsports.com/";
     private static final String METHOD_NAME = "register";
+
+    private static final int PASSWORD_UNCONSISTENT = 0x0000;
+    private static final int REGISTER_SUCCESS = 0x0001;
+    private static final int REGISTER_FAILED = 0x0002;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,13 +59,13 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void handleMessage(Message msg) {
                 switch (msg.what) {
-                    case 0x1111:
-                        registerResult.setText("Passwords are not consistent！");
+                    case PASSWORD_UNCONSISTENT:
+                        registerResult.setText("Passwords are unconsistent！");
                         break;
-                    case 0xffff:
+                    case REGISTER_SUCCESS:
                         registerResult.setText("Register success！");
                         break;
-                    case 0x0000:
+                    case REGISTER_FAILED:
                         registerResult.setText("Register failed, please try again！");
                         break;
                     default:
@@ -86,18 +90,17 @@ public class RegisterActivity extends AppCompatActivity {
                         String strUserPasswordCheck = ediUserPasswordCheck.getText().toString();
 
                         if (!strUserPassword.equals(strUserPasswordCheck)) {
-                            registerHandler.sendEmptyMessage(0x1111);
+                            registerHandler.sendEmptyMessage(PASSWORD_UNCONSISTENT);
                         } else {
-
                             try {
                                 String encryptedUserName = AESUtil.encrypt(AES_KEY, strUserName);
                                 String encryptedUserPassword = AESUtil.encrypt(AES_KEY, strUserPassword);
-                                HttpTransportSE ht = new HttpTransportSE(URL);
+                                HttpTransportSE ht = new HttpTransportSE(WEBSERVICE_WSDL_URL);
                                 ht.debug = true;
 
                                 SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
 
-                                SoapObject ruquest = new SoapObject(NAMESPACE, METHOD_NAME);
+                                SoapObject ruquest = new SoapObject(WEBSERVICE_NAMESPACE, METHOD_NAME);
 
                                 ruquest.addProperty("encryptedUserName", encryptedUserName);
                                 ruquest.addProperty("encryptedUserPassword", encryptedUserPassword);
@@ -111,9 +114,9 @@ public class RegisterActivity extends AppCompatActivity {
                                 String result = returnedValue.getPropertyAsString(0);
 
                                 if (result.equals("true")) {
-                                    registerHandler.sendEmptyMessage(0xffff);
+                                    registerHandler.sendEmptyMessage(REGISTER_SUCCESS);
                                 } else {
-                                    registerHandler.sendEmptyMessage(0x0000);
+                                    registerHandler.sendEmptyMessage(REGISTER_FAILED);
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();
