@@ -22,13 +22,14 @@
         android:orientation="vertical">
 
         <Button
-            android:layout_width="wrap_content"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:text="Test"
+            android:text="返回主界面"
             android:id="@+id/Button_Back_to_MainActivity"
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true"
             android:background="#ff0000"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:layout_alignParentEnd="false" />
     </RelativeLayout>
 </LinearLayout>
