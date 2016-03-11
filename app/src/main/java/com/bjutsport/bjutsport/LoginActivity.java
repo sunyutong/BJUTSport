@@ -117,6 +117,7 @@ public class LoginActivity extends AppCompatActivity {
                                 loginHandler.sendEmptyMessage(0xffff);
                             } else {
                                 loginHandler.sendEmptyMessage(0x0000);
+                                //发送Message以改变loginResult透明度
                                 new Thread() {
                                     public void run() {
                                         for (int i = 0; i < 256; i++) {
