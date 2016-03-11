@@ -91,10 +91,15 @@ public class LoginActivity extends AppCompatActivity {
                         String strUserPassword = ediUserPassword.getText().toString();
 
                         try {
+<<<<<<< HEAD
                             //加密用户输入的用户名和密码
                             String encryptedUserName = AESUtil.encrypt(AES_KEY, strUserName);
                             String encryptedUserPassword = AESUtil.encrypt(AES_KEY, strUserPassword);
 
+=======
+                            String encryptedUserName = AESUtil.encrypt(AES_KEY, strUserName);
+                            String encryptedUserPassword = AESUtil.encrypt(AES_KEY, strUserPassword);
+>>>>>>> github/master
                             HttpTransportSE ht = new HttpTransportSE(URL);
                             ht.debug = true;
 
