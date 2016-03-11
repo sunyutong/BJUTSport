@@ -30,7 +30,7 @@
                 android:background="@drawable/btn_login"
                 android:text="@string/login"
                 android:textColor="#303030"
-                android:textSize="13sp" />
+                android:textSize="18sp" />
 
             <Button
                 android:id="@+id/Button_Register"
@@ -43,7 +43,7 @@
                 android:background="@drawable/btn_register"
                 android:text="@string/register"
                 android:textColor="#c6c6c6"
-                android:textSize="13sp" />
+                android:textSize="18sp" />
         </LinearLayout>
 
         <TextView
@@ -56,6 +56,6 @@
             android:layout_marginRight="6dp"
             android:text="@string/skip_login"
             android:textColor="#a4a4a4"
-            android:textSize="13sp" />
+            android:textSize="16sp" />
     </RelativeLayout>
 </LinearLayout>
