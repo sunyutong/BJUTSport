@@ -121,8 +121,8 @@ public class LoginActivity extends AppCompatActivity {
                                 new Thread() {
                                     public void run() {
                                         for (int i = 0; i < 256; i++) {
-                                            loginFalseHandler.sendEmptyMessage(0x7777);
                                             try {
+                                                //显示1秒后开始渐变
                                                 if (i == 0) {
                                                     Thread.sleep(1000);
                                                 } else {
@@ -131,6 +131,7 @@ public class LoginActivity extends AppCompatActivity {
                                             } catch (Exception e) {
                                                 e.printStackTrace();
                                             }
+                                            loginFalseHandler.sendEmptyMessage(0x7777);
                                         }
                                     }
                                 }.start();
