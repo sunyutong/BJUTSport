@@ -1,5 +1,6 @@
 package com.bjutsport.bjutsport;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
@@ -40,6 +41,8 @@ public class RegisterActivity extends AppCompatActivity {
         button_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent_User = new Intent(RegisterActivity.this, MainActivity.class);
+                startActivity(intent_User);
                 finish();
             }
         });
