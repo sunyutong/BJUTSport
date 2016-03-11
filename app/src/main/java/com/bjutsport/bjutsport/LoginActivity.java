@@ -114,6 +114,7 @@ public class LoginActivity extends AppCompatActivity {
                             String result = returnedValue.getPropertyAsString(0);
 
                             if (result.equals("true")) {
+                                //发送0xffff表示登陆成功
                                 loginHandler.sendEmptyMessage(0xffff);
                             } else {
                                 loginHandler.sendEmptyMessage(0x0000);
@@ -131,6 +132,7 @@ public class LoginActivity extends AppCompatActivity {
                                             } catch (Exception e) {
                                                 e.printStackTrace();
                                             }
+                                            //发送消息
                                             loginFalseHandler.sendEmptyMessage(0x7777);
                                         }
                                     }
