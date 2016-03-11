@@ -30,14 +30,20 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //设置标题为空
         requestWindowFeature(Window.FEATURE_NO_TITLE);
+
         setContentView(R.layout.activity_login);
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            // 透明状态栏
+            //设置状态栏为透明
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
 
+        //获取返回按钮
         Button button_back = (Button) findViewById(R.id.Button_LoginActivity_to_MainActivity);
+        //点击返回主界面
         button_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
