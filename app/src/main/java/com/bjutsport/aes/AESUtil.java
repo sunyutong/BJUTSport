@@ -1,13 +1,12 @@
-package com.bjutspots.aes;
+package com.bjutsport.aes;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 /**
- * Created by HUDIYU on 2016/3/10.
+ * Created by HUDIYU on 2016/3/12.
  */
-
 public class AESUtil {
     //秘钥的初始化向量
     static final public byte[] KEY_IV = {1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8};

@@ -19,7 +19,7 @@ import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 
-import com.bjutspots.aes.AESUtil;
+import com.bjutsport.aes.AESUtil;
 
 public class RegisterActivity extends AppCompatActivity {
 
