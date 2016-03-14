@@ -189,6 +189,8 @@ public class LoginActivity extends AppCompatActivity {
                                 }.start();
                             }
                         } catch (Exception e) {
+                            //抛出异常则发送消息以显示登陆失败
+                            showLoginResultHandler.sendEmptyMessage(SHOW_LOGIN_FAILED_IN_TEXTVIEW);
                             e.printStackTrace();
                         }
                     }

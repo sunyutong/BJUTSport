@@ -168,6 +168,8 @@ public class RegisterActivity extends AppCompatActivity {
                                     registerHandler.sendEmptyMessage(SHOW_REGISTER_FAILED);
                                 }
                             } catch (Exception e) {
+                                //抛出异常则发送消息以显示注册失败
+                                registerHandler.sendEmptyMessage(SHOW_REGISTER_FAILED);
                                 e.printStackTrace();
                             }
                         }
