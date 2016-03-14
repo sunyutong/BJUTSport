@@ -2,8 +2,12 @@ package com.bjutsport.player;
 
 
 public class basketballPlayer {
+
+    //姓名
     private String name;
+    //年龄
     private int age;
+    //性别
     private boolean sex;
 
     public void setName(String name) {

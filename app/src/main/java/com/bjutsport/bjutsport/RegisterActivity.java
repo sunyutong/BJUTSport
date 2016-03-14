@@ -24,7 +24,7 @@ import com.bjutsport.aes.AESUtil;
 public class RegisterActivity extends AppCompatActivity {
 
     private static final String AES_KEY = "BJUTSports123456";
-    private static final String WEBSERVICE_WSDL_URL = "http://192.168.1.101:8080/BJUTSports/services/LoginImplPort";
+    private static final String WEBSERVICE_WSDL_URL = "http://192.168.1.100:8080/BJUTSports/services/LoginImplPort";
     private static final String WEBSERVICE_NAMESPACE = "http://login.bjutsports.com/";
     private static final String METHOD_NAME = "register";
 
@@ -168,6 +168,8 @@ public class RegisterActivity extends AppCompatActivity {
                                     registerHandler.sendEmptyMessage(SHOW_REGISTER_FAILED);
                                 }
                             } catch (Exception e) {
+                                //抛出异常则发送消息以显示注册失败
+                                registerHandler.sendEmptyMessage(SHOW_REGISTER_FAILED);
                                 e.printStackTrace();
                             }
                         }

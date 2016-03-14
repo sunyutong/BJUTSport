@@ -24,7 +24,7 @@ import com.bjutsport.aes.AESUtil;
 public class LoginActivity extends AppCompatActivity {
 
     private static final String AES_KEY = "BJUTSports123456";
-    private static final String WEBSERVICE_WSDL_URL = "http://192.168.1.101:8080/BJUTSports/services/LoginImplPort";
+    private static final String WEBSERVICE_WSDL_URL = "http://192.168.1.100:8080/BJUTSports/services/LoginImplPort";
     private static final String WEBSERVICE_NAMESPACE = "http://login.bjutsports.com/";
     private static final String METHOD_NAME = "authentication";
 
@@ -189,6 +189,8 @@ public class LoginActivity extends AppCompatActivity {
                                 }.start();
                             }
                         } catch (Exception e) {
+                            //抛出异常则发送消息以显示登陆失败
+                            showLoginResultHandler.sendEmptyMessage(SHOW_LOGIN_FAILED_IN_TEXTVIEW);
                             e.printStackTrace();
                         }
                     }
