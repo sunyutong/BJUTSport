@@ -1,5 +1,6 @@
 package com.bjutsport.bjutsport;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
@@ -21,7 +22,7 @@ import org.ksoap2.transport.HttpTransportSE;
 
 import com.bjutsport.aes.AESUtil;
 
-public class RegisterActivity extends AppCompatActivity {
+public class RegisterActivity extends Activity {
 
     private static final String AES_KEY = "BJUTSports123456";
     private static final String WEBSERVICE_WSDL_URL = "http://192.168.1.100:8080/BJUTSports/services/LoginImplPort";
