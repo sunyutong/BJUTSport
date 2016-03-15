@@ -1,9 +1,9 @@
 package com.bjutsport.bjutsport;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -21,7 +21,7 @@ import org.ksoap2.transport.HttpTransportSE;
 
 import com.bjutsport.aes.AESUtil;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends Activity {
 
     private static final String AES_KEY = "BJUTSports123456";
     private static final String WEBSERVICE_WSDL_URL = "http://192.168.1.100:8080/BJUTSports/services/LoginImplPort";
@@ -191,6 +191,25 @@ public class LoginActivity extends AppCompatActivity {
                         } catch (Exception e) {
                             //抛出异常则发送消息以显示登陆失败
                             showLoginResultHandler.sendEmptyMessage(SHOW_LOGIN_FAILED_IN_TEXTVIEW);
+                            new Thread() {
+                                public void run() {
+                                    for (int i = 0; i < 256; i++) {
+                                        try {
+                                            if (i == 0) {
+                                                //非透明显示1秒后开始渐变
+                                                Thread.sleep(1000);
+                                            } else {
+                                                //每8毫秒发送发送一次消息
+                                                Thread.sleep(8);
+                                            }
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+                                        //发送消息
+                                        textViewChangeHandler.sendEmptyMessage(CHANGE_TRANSPARENCY);
+                                    }
+                                }
+                            }.start();
                             e.printStackTrace();
                         }
                     }
@@ -198,4 +217,5 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
+    
 }
