@@ -14,7 +14,7 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/Button_RegisterActivity_to_MainActivity"
+            android:id="@+id/Button_VerificationActivity_to_MainActivity"
             android:layout_width="55dp"
             android:layout_height="match_parent"
             android:layout_alignParentStart="true"
@@ -29,7 +29,7 @@
             android:textColor="#f8f8f8"
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true"
-            android:id="@+id/TextView_Register" />
+            android:id="@+id/TextView_Verification" />
 
     </RelativeLayout>
 
@@ -51,36 +51,6 @@
             android:layout_marginTop="1dp"
             android:gravity="center" />
 
-        <EditText
-            android:id="@+id/EditText_Register_userPassword"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="#ffffff"
-            android:hint="@string/password_tip1"
-            android:textSize="11sp"
-            android:layout_alignParentEnd="false"
-            android:singleLine="true"
-            android:textColorHint="#7f7f7f7f"
-            android:password="true"
-            android:layout_alignParentStart="false"
-            android:layout_marginTop="1dp"
-            android:gravity="center"
-            android:layout_below="@+id/EditText_Verification_userName" />
-
-        <EditText
-            android:id="@+id/EditText_Register_userPassword_Check"
-            android:layout_width="match_parent"
-            android:layout_height="50sp"
-            android:background="#ffffff"
-            android:hint="@string/password_tip2"
-            android:textSize="11sp"
-            android:layout_below="@+id/EditText_Register_userPassword"
-            android:layout_alignParentStart="false"
-            android:singleLine="true"
-            android:textColorHint="#7f7f7f7f"
-            android:password="true"
-            android:layout_marginTop="1dp"
-            android:gravity="center" />
 
         <Button
             android:id="@+id/Button_Verification"
@@ -88,22 +58,44 @@
             android:layout_height="50dp"
             android:background="@drawable/btn_login_login"
             android:gravity="center"
-            android:text="@string/register"
+            android:text="@string/verification"
             android:textColor="#e9e9e9"
             android:textSize="10sp"
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="28dp"
-            android:layout_below="@+id/TextView_Register_Result" />
+            android:layout_below="@+id/EditText_Verification_verificationCode" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/TextView_Register_Result"
-            android:layout_below="@+id/EditText_Register_userPassword_Check"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="12dp"
-            android:textSize="12sp" />
+        <EditText
+            android:id="@+id/EditText_Verification_verificationCode"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="#ffffff"
+            android:hint="@string/identifying_code"
+            android:textSize="11sp"
+            android:singleLine="true"
+            android:textColorHint="#7f7f7f7f"
+            android:password="true"
+            android:gravity="center"
+            android:layout_below="@+id/EditText_Verification_userName"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="1dp"
+            android:layout_alignEnd="@+id/Button_Verification" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="@string/get_identifying_code"
+            android:id="@+id/Button_Verification_getVerificationCode"
+            android:layout_above="@+id/EditText_Register_userPassword"
+            android:layout_toEndOf="@+id/EditText_Verification_verificationCode"
+            android:layout_below="@+id/EditText_Verification_userName"
+            android:textSize="11sp"
+            android:textColor="#e9e9e9"
+            android:allowUndo="true"
+            android:background="#393839"
+            android:layout_marginTop="1dp"
+            android:layout_marginLeft="1dp" />
 
     </RelativeLayout>
 </LinearLayout>

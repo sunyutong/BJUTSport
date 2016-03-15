@@ -117,7 +117,7 @@ public class RegisterActivity extends Activity {
         };
 
         //获取注册按钮
-        Button button_register = (Button) findViewById(R.id.Button_Register);
+        Button button_register = (Button) findViewById(R.id.Button_Verification);
         button_register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -126,8 +126,7 @@ public class RegisterActivity extends Activity {
                     public void run() {
                         //获得用户名,密码,二次输入密码EditText
                         EditText ediUserName, ediIdentifyingCode, ediUserPassword, ediUserPasswordCheck;
-                        ediUserName = (EditText) findViewById(R.id.EditText_Register_userName);
-                        ediIdentifyingCode = (EditText) findViewById(R.id.EditText_Register_identifyingCode);
+                        ediUserName = (EditText) findViewById(R.id.EditText_Verification_userName);
                         ediUserPassword = (EditText) findViewById(R.id.EditText_Register_userPassword);
                         ediUserPasswordCheck = (EditText) findViewById(R.id.EditText_Register_userPassword_Check);
 
