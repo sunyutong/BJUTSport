@@ -7,6 +7,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -23,15 +24,21 @@ import com.bjutsport.aes.AESUtil;
 
 public class RegisterActivity extends Activity {
 
-    private static final String AES_KEY = "BJUTSports123456";
-    private static final String WEBSERVICE_WSDL_URL = "http://192.168.1.102:8080/BJUTSports/services/LoginImplPort";
-    private static final String WEBSERVICE_NAMESPACE = "http://login.bjutsports.com/";
+    private static final String AES_KEY = "BJUTSport1234567";
+    private static final String WEBSERVICE_WSDL_URL = "http://192.168.1.102:8080/BJUTSport/services/RegisterImplPort?wsdl";
+    private static final String WEBSERVICE_NAMESPACE = "http://register.bjutsport.com/";
     private static final String METHOD_NAME = "register";
 
     private static final int SHOW_PASSWORD_UNCONSISTENT = 0x0000;
     private static final int SHOW_REGISTER_SUCCESS = 0x0001;
     private static final int SHOW_REGISTER_FAILED = 0x0002;
     private static final int JUMP_TO_LOGINACTIVITY = 0x0003;
+    private static final int SHOW_USERNAME_ALREADY_EXIST = 0x0004;
+    private static final int CHANGE_TRANSPARENCY = 0x0005;
+
+    private static final int REGISTER_SUCCESS = 1;
+    private static final int REGISTER_FAILED = 0;
+    private static final int USERNAME_ALLREADY_EXIST = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,8 +90,25 @@ public class RegisterActivity extends Activity {
                         //显示注册失败
                         registerResult.setText("Register failed, please try again！");
                         break;
+                    case SHOW_USERNAME_ALREADY_EXIST:
+                        //显示用户名已存在
+                        registerResult.setText("Username already exist, please try another username！");
+                        break;
                     default:
                         break;
+                }
+            }
+        };
+
+        final Handler textViewChangeHandler = new Handler() {
+            //透明度初值
+            int i = 255;
+
+            @Override
+            public void handleMessage(Message msg) {
+                if (msg.what == CHANGE_TRANSPARENCY) {
+                    //每收到一次消息透明度减1
+                    registerResult.setTextColor(Color.argb(i--, 127, 127, 127));
                 }
             }
         };
@@ -156,20 +180,91 @@ public class RegisterActivity extends Activity {
                                 SoapObject returnedValue = (SoapObject) envelope.bodyIn;
 
                                 //解析返回结果
-                                String result = returnedValue.getPropertyAsString(0);
+                                int result = Integer.parseInt(returnedValue.getPropertyAsString(0));
 
-                                if (result.equals("true")) {
-                                    //如果服务器返回值为true,则发送消息以显示注册成功
-                                    registerHandler.sendEmptyMessage(SHOW_REGISTER_SUCCESS);
-                                    Thread.sleep(300);
-                                    registerSuccessHandler.sendEmptyMessage(JUMP_TO_LOGINACTIVITY);
-                                } else {
-                                    //如果服务器返回值为flase,则发送消息以显示注册失败
-                                    registerHandler.sendEmptyMessage(SHOW_REGISTER_FAILED);
+                                switch (result) {
+                                    case REGISTER_SUCCESS:
+                                        //如果服务器返回值为REGISTER_SUCCESS,则发送消息以显示注册成功
+                                        registerHandler.sendEmptyMessage(SHOW_REGISTER_SUCCESS);
+                                        //300毫秒后发送消息以从注册界面跳转至登录界面
+                                        Thread.sleep(300);
+                                        registerSuccessHandler.sendEmptyMessage(JUMP_TO_LOGINACTIVITY);
+                                        break;
+                                    case REGISTER_FAILED:
+                                        //如果服务器返回值为REGISTER_FAILED,则发送消息以显示注册失败
+                                        registerHandler.sendEmptyMessage(SHOW_REGISTER_FAILED);
+                                        //发送消息以改变TextView中文本的透明度
+                                        new Thread() {
+                                            public void run() {
+                                                for (int i = 0; i < 256; i++) {
+                                                    try {
+                                                        if (i == 0) {
+                                                            //非透明显示1秒后开始渐变
+                                                            Thread.sleep(1000);
+                                                        } else {
+                                                            //每8毫秒发送发送一次消息
+                                                            Thread.sleep(8);
+                                                        }
+                                                    } catch (Exception e) {
+                                                        e.printStackTrace();
+                                                    }
+                                                    //发送消息
+                                                    textViewChangeHandler.sendEmptyMessage(CHANGE_TRANSPARENCY);
+                                                }
+                                            }
+                                        }.start();
+                                        break;
+                                    case USERNAME_ALLREADY_EXIST:
+                                        //如果服务器返回值为REGISTER_FAILED,则发送消息以显示用户名已存在
+                                        registerHandler.sendEmptyMessage(SHOW_USERNAME_ALREADY_EXIST);
+                                        //发送消息以改变TextView中文本的透明度
+                                        new Thread() {
+                                            public void run() {
+                                                for (int i = 0; i < 256; i++) {
+                                                    try {
+                                                        if (i == 0) {
+                                                            //非透明显示1秒后开始渐变
+                                                            Thread.sleep(1000);
+                                                        } else {
+                                                            //每8毫秒发送发送一次消息
+                                                            Thread.sleep(8);
+                                                        }
+                                                    } catch (Exception e) {
+                                                        e.printStackTrace();
+                                                    }
+                                                    //发送消息
+                                                    textViewChangeHandler.sendEmptyMessage(CHANGE_TRANSPARENCY);
+                                                }
+                                            }
+                                        }.start();
+                                        break;
+                                    default:
+                                        break;
                                 }
+
                             } catch (Exception e) {
                                 //抛出异常则发送消息以显示注册失败
                                 registerHandler.sendEmptyMessage(SHOW_REGISTER_FAILED);
+                                //发送消息以改变TextView中文本的透明度
+                                new Thread() {
+                                    public void run() {
+                                        for (int i = 0; i < 256; i++) {
+                                            try {
+                                                if (i == 0) {
+                                                    //非透明显示1秒后开始渐变
+                                                    Thread.sleep(1000);
+                                                } else {
+                                                    //每8毫秒发送发送一次消息
+                                                    Thread.sleep(8);
+                                                }
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                            }
+                                            //发送消息
+                                            textViewChangeHandler.sendEmptyMessage(CHANGE_TRANSPARENCY);
+                                        }
+                                    }
+                                }.start();
                                 e.printStackTrace();
                             }
                         }
