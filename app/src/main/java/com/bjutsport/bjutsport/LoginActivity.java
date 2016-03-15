@@ -21,6 +21,8 @@ import org.ksoap2.transport.HttpTransportSE;
 
 import com.bjutsport.aes.AESUtil;
 
+import java.net.SocketTimeoutException;
+
 public class LoginActivity extends Activity {
 
     private static final String AES_KEY = "BJUTSports123456";
@@ -32,6 +34,7 @@ public class LoginActivity extends Activity {
     private static final int SHOW_LOGIN_FAILED_IN_TEXTVIEW = 0x0001;
     private static final int JUMP_TO_USERACTIVITY = 0x0002;
     private static final int CHANGE_TRANSPARENCY = 0x0003;
+    private static final int SHOW_SOCKETTIMOUT = 0x0005;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +74,11 @@ public class LoginActivity extends Activity {
                         //显示登录失败
                         loginResult.setText("Login failed, please try again！");
                         break;
+                    case SHOW_SOCKETTIMOUT:
+                        //显示连接超时
+                        loginResult.setText("Can not connect to Server\n" +
+                                "please check your network connection！");
+                        break;
                     default:
                         break;
                 }
@@ -83,8 +91,6 @@ public class LoginActivity extends Activity {
             public void handleMessage(Message msg) {
                 if (msg.what == JUMP_TO_USERACTIVITY) {
                     //跳转到用户界面
-                    Intent intent_User = new Intent(LoginActivity.this, UserActivity.class);
-                    startActivity(intent_User);
                     finish();
                 }
             }
@@ -133,7 +139,7 @@ public class LoginActivity extends Activity {
                             ruquest.addProperty("encryptedUserPassword", encryptedUserPassword);
 
                             //创建HttpTransportSE对象,并通过HttpTransportSE类的构造方法指定Webservice的WSDL文档的URL
-                            HttpTransportSE ht = new HttpTransportSE(WEBSERVICE_WSDL_URL);
+                            HttpTransportSE ht = new HttpTransportSE(WEBSERVICE_WSDL_URL, 1000);
 
                             //生成调用WebService方法的SOAP请求消息,该信息由SoapSerializationEnvelope描述
                             //SOAP版本号为1.1
@@ -182,9 +188,10 @@ public class LoginActivity extends Activity {
                                     }
                                 }.start();
                             }
-                        } catch (Exception e) {
-                            //抛出异常则发送消息以显示登陆失败
-                            showLoginResultHandler.sendEmptyMessage(SHOW_LOGIN_FAILED_IN_TEXTVIEW);
+                        } catch (SocketTimeoutException ste) {
+                            //抛出异常以显示连接超时
+                            showLoginResultHandler.sendEmptyMessage(SHOW_SOCKETTIMOUT);
+                            //发送消息以改变TextView中文本的透明度
                             new Thread() {
                                 public void run() {
                                     for (int i = 0; i < 256; i++) {
@@ -204,6 +211,7 @@ public class LoginActivity extends Activity {
                                     }
                                 }
                             }.start();
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }

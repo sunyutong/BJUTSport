@@ -95,7 +95,8 @@
             android:layout_height="wrap_content"
             android:layout_alignTop="@+id/TextView_LoginActivity_ForgetPassword"
             android:layout_centerHorizontal="true"
-            android:textSize="12sp" />
+            android:textSize="12sp"
+            android:gravity="center" />
 
     </RelativeLayout>
 </LinearLayout>
