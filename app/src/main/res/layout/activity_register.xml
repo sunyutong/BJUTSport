@@ -45,14 +45,11 @@
             android:layout_height="50dp"
             android:background="#ffffff"
             android:hint="@string/name_tip"
-            android:textCursorDrawable="@null"
             android:textSize="11sp"
-
             android:singleLine="true"
             android:textColorHint="#7f7f7f7f"
             android:layout_marginTop="1dp"
-            android:layout_marginLeft="2dp"
-            android:layout_marginRight="2dp" />
+            android:gravity="center" />
 
         <EditText
             android:id="@+id/EditText_Register_userPassword"
@@ -60,7 +57,6 @@
             android:layout_height="50dp"
             android:background="#ffffff"
             android:hint="@string/password_tip1"
-            android:textCursorDrawable="@null"
             android:textSize="11sp"
             android:layout_below="@+id/EditText_Register_userName"
             android:layout_alignParentEnd="false"
@@ -69,8 +65,7 @@
             android:password="true"
             android:layout_alignParentStart="false"
             android:layout_marginTop="1dp"
-            android:layout_marginLeft="2dp"
-            android:layout_marginRight="2dp" />
+            android:gravity="center" />
 
         <EditText
             android:id="@+id/EditText_Register_userPassword_Check"
@@ -78,7 +73,6 @@
             android:layout_height="50sp"
             android:background="#ffffff"
             android:hint="@string/password_tip2"
-            android:textCursorDrawable="@null"
             android:textSize="11sp"
             android:layout_below="@+id/EditText_Register_userPassword"
             android:layout_alignParentStart="false"
@@ -86,8 +80,7 @@
             android:textColorHint="#7f7f7f7f"
             android:password="true"
             android:layout_marginTop="1dp"
-            android:layout_marginLeft="2dp"
-            android:layout_marginRight="2dp" />
+            android:gravity="center" />
 
         <Button
             android:id="@+id/Button_Register"
