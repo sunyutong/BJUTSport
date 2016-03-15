@@ -101,20 +101,6 @@ public class LoginActivity extends Activity {
             }
         };
 
-        //设置TextView_Login_Result中文本的透明度的Handler
-        final Handler textViewChangeHandler = new Handler() {
-            //透明度初值
-            int i = 255;
-
-            @Override
-            public void handleMessage(Message msg) {
-                if (msg.what == CHANGE_TRANSPARENCY) {
-                    //每收到一次消息透明度减1
-                    loginResult.setTextColor(Color.argb(i--, 127, 127, 127));
-                }
-            }
-        };
-
         //获取登录按按钮
         Button button_login = (Button) findViewById(R.id.Button_LoginActivity_Login);
         button_login.setOnClickListener(new View.OnClickListener() {
@@ -173,26 +159,6 @@ public class LoginActivity extends Activity {
                                 case LOGIN_FAILED:
                                     //如果服务器返回值为flase,则发送消息以显示登陆失败
                                     showLoginResultHandler.sendEmptyMessage(SHOW_LOGIN_FAILED_IN_TEXTVIEW);
-                                    //发送消息以改变TextView中文本的透明度
-                                    new Thread() {
-                                        public void run() {
-                                            for (int i = 0; i < 256; i++) {
-                                                try {
-                                                    if (i == 0) {
-                                                        //非透明显示1秒后开始渐变
-                                                        Thread.sleep(1000);
-                                                    } else {
-                                                        //每8毫秒发送发送一次消息
-                                                        Thread.sleep(8);
-                                                    }
-                                                } catch (Exception e) {
-                                                    e.printStackTrace();
-                                                }
-                                                //发送消息
-                                                textViewChangeHandler.sendEmptyMessage(CHANGE_TRANSPARENCY);
-                                            }
-                                        }
-                                    }.start();
                                     break;
                                 default:
                                     break;
@@ -201,26 +167,6 @@ public class LoginActivity extends Activity {
                         } catch (SocketTimeoutException ste) {
                             //抛出异常以显示连接超时
                             showLoginResultHandler.sendEmptyMessage(SHOW_SOCKETTIMOUT);
-                            //发送消息以改变TextView中文本的透明度
-                            new Thread() {
-                                public void run() {
-                                    for (int i = 0; i < 256; i++) {
-                                        try {
-                                            if (i == 0) {
-                                                //非透明显示1秒后开始渐变
-                                                Thread.sleep(1000);
-                                            } else {
-                                                //每8毫秒发送发送一次消息
-                                                Thread.sleep(8);
-                                            }
-                                        } catch (Exception e) {
-                                            e.printStackTrace();
-                                        }
-                                        //发送消息
-                                        textViewChangeHandler.sendEmptyMessage(CHANGE_TRANSPARENCY);
-                                    }
-                                }
-                            }.start();
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
