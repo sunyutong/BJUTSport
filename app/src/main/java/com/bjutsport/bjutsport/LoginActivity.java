@@ -25,16 +25,19 @@ import java.net.SocketTimeoutException;
 
 public class LoginActivity extends Activity {
 
-    private static final String AES_KEY = "BJUTSports123456";
-    private static final String WEBSERVICE_WSDL_URL = "http://192.168.1.102:8080/BJUTSports/services/LoginImplPort";
-    private static final String WEBSERVICE_NAMESPACE = "http://login.bjutsports.com/";
-    private static final String METHOD_NAME = "authentication";
+    private static final String AES_KEY = "BJUTSport1234567";
+    private static final String WEBSERVICE_WSDL_URL = "http://192.168.1.102:8080/BJUTSport/services/LoginImplPort?wsdl";
+    private static final String WEBSERVICE_NAMESPACE = "http://login.bjutsport.com/";
+    private static final String METHOD_NAME = "login";
 
     private static final int SHOW_LOGIN_SUCCESS_IN_TEXTVIEW = 0x0000;
     private static final int SHOW_LOGIN_FAILED_IN_TEXTVIEW = 0x0001;
     private static final int JUMP_TO_USERACTIVITY = 0x0002;
     private static final int CHANGE_TRANSPARENCY = 0x0003;
     private static final int SHOW_SOCKETTIMOUT = 0x0005;
+
+    private static final int LOGIN_SUCCESS = 1;
+    private static final int LOGIN_FAILED = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -156,38 +159,43 @@ public class LoginActivity extends Activity {
                             SoapObject returnedValue = (SoapObject) envelope.bodyIn;
 
                             //解析返回结果
-                            String result = returnedValue.getPropertyAsString(0);
+                            int result = Integer.parseInt(returnedValue.getPropertyAsString(0));
 
-                            if (result.equals("true")) {
-                                //如果服务器返回值为true,则发送消息以显示登陆成功
-                                showLoginResultHandler.sendEmptyMessage(SHOW_LOGIN_SUCCESS_IN_TEXTVIEW);
-                                //300毫秒后发送消息以从登录界面跳转至用户界面
-                                Thread.sleep(300);
-                                loginSuccessHandler.sendEmptyMessage(JUMP_TO_USERACTIVITY);
-                            } else {
-                                //如果服务器返回值为flase,则发送消息以显示登陆失败
-                                showLoginResultHandler.sendEmptyMessage(SHOW_LOGIN_FAILED_IN_TEXTVIEW);
-                                //发送消息以改变TextView中文本的透明度
-                                new Thread() {
-                                    public void run() {
-                                        for (int i = 0; i < 256; i++) {
-                                            try {
-                                                if (i == 0) {
-                                                    //非透明显示1秒后开始渐变
-                                                    Thread.sleep(1000);
-                                                } else {
-                                                    //每8毫秒发送发送一次消息
-                                                    Thread.sleep(8);
+                            switch (result) {
+                                case LOGIN_SUCCESS:
+                                    showLoginResultHandler.sendEmptyMessage(SHOW_LOGIN_SUCCESS_IN_TEXTVIEW);
+                                    //300毫秒后发送消息以从登录界面跳转至用户界面
+                                    Thread.sleep(300);
+                                    loginSuccessHandler.sendEmptyMessage(JUMP_TO_USERACTIVITY);
+                                    break;
+                                case LOGIN_FAILED:
+                                    //如果服务器返回值为flase,则发送消息以显示登陆失败
+                                    showLoginResultHandler.sendEmptyMessage(SHOW_LOGIN_FAILED_IN_TEXTVIEW);
+                                    //发送消息以改变TextView中文本的透明度
+                                    new Thread() {
+                                        public void run() {
+                                            for (int i = 0; i < 256; i++) {
+                                                try {
+                                                    if (i == 0) {
+                                                        //非透明显示1秒后开始渐变
+                                                        Thread.sleep(1000);
+                                                    } else {
+                                                        //每8毫秒发送发送一次消息
+                                                        Thread.sleep(8);
+                                                    }
+                                                } catch (Exception e) {
+                                                    e.printStackTrace();
                                                 }
-                                            } catch (Exception e) {
-                                                e.printStackTrace();
+                                                //发送消息
+                                                textViewChangeHandler.sendEmptyMessage(CHANGE_TRANSPARENCY);
                                             }
-                                            //发送消息
-                                            textViewChangeHandler.sendEmptyMessage(CHANGE_TRANSPARENCY);
                                         }
-                                    }
-                                }.start();
+                                    }.start();
+                                    break;
+                                default:
+                                    break;
                             }
+
                         } catch (SocketTimeoutException ste) {
                             //抛出异常以显示连接超时
                             showLoginResultHandler.sendEmptyMessage(SHOW_SOCKETTIMOUT);
