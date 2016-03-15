@@ -41,7 +41,21 @@ public class VerificationActivity extends Activity implements OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_verification);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            // 透明状态栏
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        }
+        Button button_back = (Button)findViewById(R.id.Button_VerificationActivity_to_MainActivity);
+        button_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        init();
     }
 
     private void init() {
@@ -121,7 +135,7 @@ public class VerificationActivity extends Activity implements OnClickListener {
             } else if (msg.what == -8) {
                 requestCodeBtn.setText("获取验证码");
                 requestCodeBtn.setClickable(true);
-                i = 30;
+                i = 60;
             } else {
                 int event = msg.arg1;
                 int result = msg.arg2;
