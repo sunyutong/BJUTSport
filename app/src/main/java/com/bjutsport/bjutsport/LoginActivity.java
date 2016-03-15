@@ -93,7 +93,9 @@ public class LoginActivity extends Activity {
             @Override
             public void handleMessage(Message msg) {
                 if (msg.what == JUMP_TO_USERACTIVITY) {
-                    //跳转到用户界面
+                    //从注册界面跳转至跳转到用户界面
+                    Intent intent_User = new Intent(LoginActivity.this, UserActivity.class);
+                    startActivity(intent_User);
                     finish();
                 }
             }
