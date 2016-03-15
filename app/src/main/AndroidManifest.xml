@@ -19,7 +19,8 @@
         </activity>
         <activity android:name=".LoginActivity" />
         <activity android:name=".RegisterActivity" />
-        <activity android:name=".UserActivity"></activity>
+        <activity android:name=".UserActivity" />
+        <activity android:name=".IdentifyingCodeActivity"></activity>
     </application>
 
 </manifest>
