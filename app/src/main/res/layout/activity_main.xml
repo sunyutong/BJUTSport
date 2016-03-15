@@ -1,7 +1,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/login"
+    android:background="@drawable/background_jordan"
     android:clipToPadding="true"
     android:fitsSystemWindows="true"
     android:orientation="horizontal">
@@ -11,7 +11,7 @@
         android:layout_height="match_parent">
 
         <LinearLayout
-            android:id="@+id/Linear1"
+            android:id="@+id/LinearLayout_MainActivity_1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
@@ -20,42 +20,42 @@
             android:layout_marginRight="2dp">
 
             <Button
-                android:id="@+id/Button_Login"
+                android:id="@+id/Button_MainActivity_Login"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="2dp"
                 android:layout_marginLeft="1dp"
                 android:layout_marginRight="1dp"
                 android:layout_weight="1"
-                android:background="@drawable/btn_login"
+                android:background="@drawable/btn_main_login"
                 android:text="@string/login"
                 android:textColor="#303030"
-                android:textSize="18sp" />
+                android:textSize="10dp" />
 
             <Button
-                android:id="@+id/Button_Register"
+                android:id="@+id/Button_MainActivity_Register"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="2dp"
                 android:layout_marginLeft="1dp"
                 android:layout_marginRight="1dp"
                 android:layout_weight="1"
-                android:background="@drawable/btn_register"
+                android:background="@drawable/btn_main_register"
                 android:text="@string/register"
                 android:textColor="#c6c6c6"
-                android:textSize="18sp" />
+                android:textSize="10dp" />
         </LinearLayout>
 
         <TextView
-            android:id="@+id/TextView_Skip_Login"
+            android:id="@+id/TextView_MainActivity_Skip_Login"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/Linear1"
-            android:layout_alignEnd="@+id/Linear1"
+            android:layout_above="@+id/LinearLayout_MainActivity_1"
+            android:layout_alignEnd="@+id/LinearLayout_MainActivity_1"
             android:layout_marginBottom="6dp"
             android:layout_marginRight="6dp"
             android:text="@string/skip_login"
             android:textColor="#a4a4a4"
-            android:textSize="16sp" />
+            android:textSize="14dp" />
     </RelativeLayout>
 </LinearLayout>

@@ -36,19 +36,14 @@ public class LoginActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        //设置标题为空
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-
         setContentView(R.layout.activity_login);
-
+        //设置状态栏为透明
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            //设置状态栏为透明
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
-
         //获取返回按钮
-        Button button_back = (Button) findViewById(R.id.Button_LoginActivity_to_MainActivity);
+        Button button_back = (Button) findViewById(R.id.Button_LoginActivity_Back);
         //点击返回主界面
         button_back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,10 +53,9 @@ public class LoginActivity extends Activity {
                 finish();
             }
         });
-
         //获取TextView_Login_Result
         final TextView loginResult;
-        loginResult = (TextView) findViewById(R.id.TextView_Login_Result);
+        loginResult = (TextView) findViewById(R.id.TextView_LoginActivity_Result);
 
         //显示TextView_Login_Result中文本的Handler
         final Handler showLoginResultHandler = new Handler() {
@@ -111,7 +105,7 @@ public class LoginActivity extends Activity {
         };
 
         //获取登录按按钮
-        Button button_login = (Button) findViewById(R.id.Button_Login);
+        Button button_login = (Button) findViewById(R.id.Button_LoginActivity_Login);
         button_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -119,8 +113,8 @@ public class LoginActivity extends Activity {
                 new Thread() {
                     public void run() {
                         //获得用户名与密码EditText
-                        EditText ediUserName = (EditText) findViewById(R.id.EditText_Login_userName);
-                        EditText ediUserPassword = (EditText) findViewById(R.id.EditText_Login_userPassword);
+                        EditText ediUserName = (EditText) findViewById(R.id.EditText_LoginActivity_UserName);
+                        EditText ediUserPassword = (EditText) findViewById(R.id.EditText_LoginActivity_UserPassword);
 
                         //提取用户输入的用户名和密码
                         String strUserName = ediUserName.getText().toString();
@@ -217,5 +211,5 @@ public class LoginActivity extends Activity {
             }
         });
     }
-    
+
 }
