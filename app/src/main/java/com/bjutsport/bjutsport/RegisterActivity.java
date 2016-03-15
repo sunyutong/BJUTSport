@@ -21,6 +21,8 @@ import org.ksoap2.transport.HttpTransportSE;
 
 import com.bjutsport.aes.AESUtil;
 
+import java.net.SocketTimeoutException;
+
 public class RegisterActivity extends Activity {
 
     private static final String AES_KEY = "BJUTSports123456";
@@ -30,8 +32,10 @@ public class RegisterActivity extends Activity {
 
     private static final int SHOW_PASSWORD_UNCONSISTENT = 0x0000;
     private static final int SHOW_REGISTER_SUCCESS = 0x0001;
+    private static final int SHOW_SOCKETTIMOUT = 0x0005;
     private static final int SHOW_REGISTER_FAILED = 0x0002;
     private static final int JUMP_TO_LOGINACTIVITY = 0x0003;
+    private static final int CHANGE_TRANSPARENCY = 0x0004;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +87,11 @@ public class RegisterActivity extends Activity {
                         //显示注册失败
                         registerResult.setText("Register failed, please try again！");
                         break;
+                    case SHOW_SOCKETTIMOUT:
+                        //显示连接超时
+                        registerResult.setText("Can not connect to Server\n" +
+                                "please check your network connection！");
+                        break;
                     default:
                         break;
                 }
@@ -98,6 +107,20 @@ public class RegisterActivity extends Activity {
                     Intent intent_User = new Intent(RegisterActivity.this, LoginActivity.class);
                     startActivity(intent_User);
                     finish();
+                }
+            }
+        };
+
+        //设置TextView_Register_Result中文本的透明度的Handler
+        final Handler textViewChangeHandler = new Handler() {
+            //透明度初值
+            int i = 255;
+
+            @Override
+            public void handleMessage(Message msg) {
+                if (msg.what == CHANGE_TRANSPARENCY) {
+                    //每收到一次消息透明度减1
+                    registerResult.setTextColor(Color.argb(i--, 127, 127, 127));
                 }
             }
         };
@@ -139,7 +162,7 @@ public class RegisterActivity extends Activity {
                                 ruquest.addProperty("encryptedUserPassword", encryptedUserPassword);
 
                                 //创建HttpTransportSE对象,并通过HttpTransportSE类的构造方法指定Webservice的WSDL文档的URL
-                                HttpTransportSE ht = new HttpTransportSE(WEBSERVICE_WSDL_URL);
+                                HttpTransportSE ht = new HttpTransportSE(WEBSERVICE_WSDL_URL, 1000);
 
                                 //生成调用WebService方法的SOAP请求消息,该信息由SoapSerializationEnvelope描述
                                 //SOAP版本号为1.1
@@ -167,9 +190,30 @@ public class RegisterActivity extends Activity {
                                     //如果服务器返回值为flase,则发送消息以显示注册失败
                                     registerHandler.sendEmptyMessage(SHOW_REGISTER_FAILED);
                                 }
+                            } catch (SocketTimeoutException ste) {
+                                //抛出异常以显示连接超时
+                                registerHandler.sendEmptyMessage(SHOW_SOCKETTIMOUT);
+                                //发送消息以改变TextView中文本的透明度
+                                new Thread() {
+                                    public void run() {
+                                        for (int i = 0; i < 256; i++) {
+                                            try {
+                                                if (i == 0) {
+                                                    //非透明显示1秒后开始渐变
+                                                    Thread.sleep(1000);
+                                                } else {
+                                                    //每8毫秒发送发送一次消息
+                                                    Thread.sleep(8);
+                                                }
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                            }
+                                            //发送消息
+                                            textViewChangeHandler.sendEmptyMessage(CHANGE_TRANSPARENCY);
+                                        }
+                                    }
+                                }.start();
                             } catch (Exception e) {
-                                //抛出异常则发送消息以显示注册失败
-                                registerHandler.sendEmptyMessage(SHOW_REGISTER_FAILED);
                                 e.printStackTrace();
                             }
                         }
