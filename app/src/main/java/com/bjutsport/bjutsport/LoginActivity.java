@@ -32,9 +32,9 @@ public class LoginActivity extends Activity {
 
     private static final int SHOW_LOGIN_SUCCESS_IN_TEXTVIEW = 0x0000;
     private static final int SHOW_LOGIN_FAILED_IN_TEXTVIEW = 0x0001;
-    private static final int JUMP_TO_USERACTIVITY = 0x0002;
-    private static final int CHANGE_TRANSPARENCY = 0x0003;
-    private static final int SHOW_SOCKETTIMOUT = 0x0005;
+    private static final int SHOW_SOCKETTIMOUT = 0x0002;
+    private static final int JUMP_TO_USERACTIVITY = 0x0003;
+
 
     private static final int LOGIN_SUCCESS = 1;
     private static final int LOGIN_FAILED = 0;

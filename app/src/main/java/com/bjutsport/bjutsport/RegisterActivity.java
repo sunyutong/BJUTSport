@@ -32,11 +32,10 @@ public class RegisterActivity extends Activity {
 
     private static final int SHOW_PASSWORD_UNCONSISTENT = 0x0000;
     private static final int SHOW_REGISTER_SUCCESS = 0x0001;
-    private static final int SHOW_SOCKETTIMOUT = 0x0005;
     private static final int SHOW_REGISTER_FAILED = 0x0002;
-    private static final int SHOW_USERNAME_ALREADY_EXIST = 0x0006;
-    private static final int JUMP_TO_LOGINACTIVITY = 0x0003;
-    private static final int CHANGE_TRANSPARENCY = 0x0004;
+    private static final int SHOW_USERNAME_ALREADY_EXIST = 0x0003;
+    private static final int SHOW_SOCKETTIMOUT = 0x0004;
+    private static final int JUMP_TO_LOGINACTIVITY = 0x0005;
 
     private static final int REGISTER_SUCCESS = 1;
     private static final int REGISTER_FAILED = 0;
