@@ -125,8 +125,9 @@ public class RegisterActivity extends Activity {
                 new Thread() {
                     public void run() {
                         //获得用户名,密码,二次输入密码EditText
-                        EditText ediUserName, ediUserPassword, ediUserPasswordCheck;
+                        EditText ediUserName, ediIdentifyingCode, ediUserPassword, ediUserPasswordCheck;
                         ediUserName = (EditText) findViewById(R.id.EditText_Register_userName);
+                        ediIdentifyingCode = (EditText) findViewById(R.id.EditText_Register_identifyingCode);
                         ediUserPassword = (EditText) findViewById(R.id.EditText_Register_userPassword);
                         ediUserPasswordCheck = (EditText) findViewById(R.id.EditText_Register_userPassword_Check);
 
