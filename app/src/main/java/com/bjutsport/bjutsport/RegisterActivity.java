@@ -58,8 +58,6 @@ public class RegisterActivity extends Activity {
         button_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent_User = new Intent(RegisterActivity.this, MainActivity.class);
-                startActivity(intent_User);
                 finish();
             }
         });

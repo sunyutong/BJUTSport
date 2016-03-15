@@ -91,8 +91,6 @@ public class LoginActivity extends Activity {
             public void handleMessage(Message msg) {
                 if (msg.what == JUMP_TO_USERACTIVITY) {
                     //跳转到用户界面
-                    Intent intent_User = new Intent(LoginActivity.this, UserActivity.class);
-                    startActivity(intent_User);
                     finish();
                 }
             }
