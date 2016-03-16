@@ -33,7 +33,10 @@ public class RegisterActivity extends Activity {
     private static final int SHOW_REGISTER_SUCCESS = 0x0001;
     private static final int SHOW_REGISTER_FAILED = 0x0002;
     private static final int SHOW_SOCKETTIMOUT = 0x0003;
-    private static final int JUMP_TO_LOGINACTIVITY = 0x0004;
+    private static final int SHOW_PASSWORD_TOO_SHORT = 0x0004;
+    private static final int JUMP_TO_LOGINACTIVITY = 0x0005;
+
+    private static final int passwordLength = 8;
 
     private static final int REGISTER_SUCCESS = 1;
     private static final int REGISTER_FAILED = 0;
@@ -46,7 +49,6 @@ public class RegisterActivity extends Activity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         setContentView(R.layout.activity_register);
-
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             // 透明状态栏
@@ -72,6 +74,10 @@ public class RegisterActivity extends Activity {
             @Override
             public void handleMessage(Message msg) {
                 switch (msg.what) {
+                    case SHOW_PASSWORD_TOO_SHORT:
+                        //显示密码太短
+                        Toast.makeText(getApplicationContext(), "密码长度应至少大于8", Toast.LENGTH_SHORT).show();
+                        break;
                     case SHOW_PASSWORD_UNCONSISTENT:
                         //显示密码前后不一致
                         Toast.makeText(getApplicationContext(), "密码前后不一致", Toast.LENGTH_SHORT).show();
@@ -118,8 +124,10 @@ public class RegisterActivity extends Activity {
                         String strUserName = bundle.getString("phoneNums");
                         String strUserPassword = ediUserPassword.getText().toString();
                         String strUserPasswordCheck = ediUserPasswordCheck.getText().toString();
-
-                        if (!strUserPassword.equals(strUserPasswordCheck)) {
+                        if (!checkPasswordLength(strUserPassword)) {
+                            //如果用户输入的密码长度小于8,发送消息显示
+                            registerHandler.sendEmptyMessage(SHOW_PASSWORD_TOO_SHORT);
+                        } else if (!strUserPassword.equals(strUserPasswordCheck)) {
                             //如果用户输入的密码前后不一致,发送消息显示密码前后不一致
                             registerHandler.sendEmptyMessage(SHOW_PASSWORD_UNCONSISTENT);
                         } else {
@@ -182,6 +190,10 @@ public class RegisterActivity extends Activity {
                 }).start();
             }
         });
+    }
+
+    private boolean checkPasswordLength(String password) {
+        return password.length() >= passwordLength;
     }
 
 }
