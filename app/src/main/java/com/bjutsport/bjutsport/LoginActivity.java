@@ -13,6 +13,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.SoapObject;
@@ -54,49 +55,34 @@ public class LoginActivity extends Activity {
         button_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent_User = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(intent_User);
                 finish();
             }
         });
-        //获取TextView_Login_Result
-        final TextView loginResult;
-        loginResult = (TextView) findViewById(R.id.TextView_LoginActivity_Result);
 
-        //显示TextView_Login_Result中文本的Handler
-        final Handler showLoginResultHandler = new Handler() {
+        //Login的Handler
+        final Handler loginHandler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
-                loginResult.setTextColor(Color.argb(255, 127, 127, 127));
                 switch (msg.what) {
                     case SHOW_LOGIN_SUCCESS_IN_TEXTVIEW:
                         //显示登录成功
-                        loginResult.setText("Login success！");
+                        Toast.makeText(getApplicationContext(), "登陆成功", Toast.LENGTH_SHORT).show();
                         break;
                     case SHOW_LOGIN_FAILED_IN_TEXTVIEW:
                         //显示登录失败
-                        loginResult.setText("Login failed, please try again！");
+                        Toast.makeText(getApplicationContext(), "登录失败,用户名或密码错误", Toast.LENGTH_SHORT).show();
                         break;
                     case SHOW_SOCKETTIMOUT:
                         //显示连接超时
-                        loginResult.setText("Can not connect to Server\n" +
-                                "please check your network connection！");
+                        Toast.makeText(getApplicationContext(), "连接超时,请检查网络连接", Toast.LENGTH_SHORT).show();
+                        break;
+                    case JUMP_TO_USERACTIVITY:
+                        Intent intent_User = new Intent(LoginActivity.this, UserActivity.class);
+                        startActivity(intent_User);
+                        finish();
                         break;
                     default:
                         break;
-                }
-            }
-        };
-
-        //获取登录成功消息的Handler
-        final Handler loginSuccessHandler = new Handler() {
-            @Override
-            public void handleMessage(Message msg) {
-                if (msg.what == JUMP_TO_USERACTIVITY) {
-                    //从注册界面跳转至跳转到用户界面
-                    Intent intent_User = new Intent(LoginActivity.this, UserActivity.class);
-                    startActivity(intent_User);
-                    finish();
                 }
             }
         };
@@ -107,7 +93,8 @@ public class LoginActivity extends Activity {
             @Override
             public void onClick(View v) {
                 //创建新的进程以进行网络访问
-                new Thread() {
+                new Thread(new Runnable() {
+                    @Override
                     public void run() {
                         //获得用户名与密码EditText
                         EditText ediUserName = (EditText) findViewById(R.id.EditText_LoginActivity_UserName);
@@ -151,14 +138,14 @@ public class LoginActivity extends Activity {
 
                             switch (result) {
                                 case LOGIN_SUCCESS:
-                                    showLoginResultHandler.sendEmptyMessage(SHOW_LOGIN_SUCCESS_IN_TEXTVIEW);
+                                    loginHandler.sendEmptyMessage(SHOW_LOGIN_SUCCESS_IN_TEXTVIEW);
                                     //300毫秒后发送消息以从登录界面跳转至用户界面
                                     Thread.sleep(300);
-                                    loginSuccessHandler.sendEmptyMessage(JUMP_TO_USERACTIVITY);
+                                    loginHandler.sendEmptyMessage(JUMP_TO_USERACTIVITY);
                                     break;
                                 case LOGIN_FAILED:
                                     //如果服务器返回值为flase,则发送消息以显示登陆失败
-                                    showLoginResultHandler.sendEmptyMessage(SHOW_LOGIN_FAILED_IN_TEXTVIEW);
+                                    loginHandler.sendEmptyMessage(SHOW_LOGIN_FAILED_IN_TEXTVIEW);
                                     break;
                                 default:
                                     break;
@@ -166,12 +153,12 @@ public class LoginActivity extends Activity {
 
                         } catch (SocketTimeoutException ste) {
                             //抛出异常以显示连接超时
-                            showLoginResultHandler.sendEmptyMessage(SHOW_SOCKETTIMOUT);
+                            loginHandler.sendEmptyMessage(SHOW_SOCKETTIMOUT);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }
-                }.start();
+                }).start();
             }
         });
     }

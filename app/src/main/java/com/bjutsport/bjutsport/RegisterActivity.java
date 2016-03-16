@@ -2,7 +2,6 @@ package com.bjutsport.bjutsport;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -12,7 +11,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.SoapObject;
@@ -66,36 +65,37 @@ public class RegisterActivity extends Activity {
             }
         });
 
-        //获取TextView_Register_Result
-        final TextView registerResult;
-        registerResult = (TextView) findViewById(R.id.TextView_Register_Result);
-        //设置初始颜色
-        registerResult.setTextColor(Color.argb(255, 127, 127, 127));
+        final Bundle bundle = this.getIntent().getExtras();
 
-        //显示TextView_Register_Result中文本的Handler
+        //Register的Handler
         final Handler registerHandler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
                 switch (msg.what) {
                     case SHOW_PASSWORD_UNCONSISTENT:
                         //显示密码前后不一致
-                        registerResult.setText("Passwords are unconsistent！");
+                        Toast.makeText(getApplicationContext(), "密码前后不一致", Toast.LENGTH_SHORT).show();
                         break;
                     case SHOW_REGISTER_SUCCESS:
                         //显示注册成功
-                        registerResult.setText("Register success！");
+                        Toast.makeText(getApplicationContext(), "注册成功", Toast.LENGTH_SHORT).show();
                         break;
                     case SHOW_REGISTER_FAILED:
                         //显示注册失败
-                        registerResult.setText("Register failed, please try again！");
+                        Toast.makeText(getApplicationContext(), "注册失败", Toast.LENGTH_SHORT).show();
                         break;
                     case SHOW_USERNAME_ALREADY_EXIST:
-                        registerResult.setText("Username already exist, please try another username！");
+                        Toast.makeText(getApplicationContext(), "用户名已存在", Toast.LENGTH_SHORT).show();
                         break;
                     case SHOW_SOCKETTIMOUT:
                         //显示连接超时
-                        registerResult.setText("Can not connect to Server\n" +
-                                "please check your network connection！");
+                        Toast.makeText(getApplicationContext(), "连接超时,请检查网络连接", Toast.LENGTH_SHORT).show();
+                        break;
+                    case JUMP_TO_LOGINACTIVITY:
+                        //跳转到用户界面
+                        Intent intent_User = new Intent(RegisterActivity.this, LoginActivity.class);
+                        startActivity(intent_User);
+                        finish();
                         break;
                     default:
                         break;
@@ -103,35 +103,22 @@ public class RegisterActivity extends Activity {
             }
         };
 
-        //获取注册成功消息的Handler
-        final Handler registerSuccessHandler = new Handler() {
-            @Override
-            public void handleMessage(Message msg) {
-                if (msg.what == JUMP_TO_LOGINACTIVITY) {
-                    //跳转到用户界面
-                    Intent intent_User = new Intent(RegisterActivity.this, LoginActivity.class);
-                    startActivity(intent_User);
-                    finish();
-                }
-            }
-        };
-
         //获取注册按钮
-        Button button_register = (Button) findViewById(R.id.Button_Register);
+        Button button_register = (Button) findViewById(R.id.Button_Verification);
         button_register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //创建新的进程以进行网络访问
-                new Thread() {
+                new Thread(new Runnable() {
+                    @Override
                     public void run() {
-                        //获得用户名,密码,二次输入密码EditText
-                        EditText ediUserName, ediUserPassword, ediUserPasswordCheck;
-                        ediUserName = (EditText) findViewById(R.id.EditText_Register_userName);
+                        //获得密码,二次输入密码EditText
+                        EditText ediUserPassword, ediUserPasswordCheck;
                         ediUserPassword = (EditText) findViewById(R.id.EditText_Register_userPassword);
                         ediUserPasswordCheck = (EditText) findViewById(R.id.EditText_Register_userPassword_Check);
 
                         //提取用户输入的用户名,密码和二次密码
-                        String strUserName = ediUserName.getText().toString();
+                        String strUserName = bundle.getString("phoneNums");
                         String strUserPassword = ediUserPassword.getText().toString();
                         String strUserPasswordCheck = ediUserPasswordCheck.getText().toString();
 
@@ -177,7 +164,7 @@ public class RegisterActivity extends Activity {
                                         //如果服务器返回值为true,则发送消息以显示注册成功
                                         registerHandler.sendEmptyMessage(SHOW_REGISTER_SUCCESS);
                                         Thread.sleep(300);
-                                        registerSuccessHandler.sendEmptyMessage(JUMP_TO_LOGINACTIVITY);
+                                        registerHandler.sendEmptyMessage(JUMP_TO_LOGINACTIVITY);
                                         break;
                                     case REGISTER_FAILED:
                                         //如果服务器返回值为flase,则发送消息以显示注册失败
@@ -199,7 +186,7 @@ public class RegisterActivity extends Activity {
                             }
                         }
                     }
-                }.start();
+                }).start();
             }
         });
     }

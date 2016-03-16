@@ -46,7 +46,7 @@ public class MainActivity extends Activity {
             //点击进入注册界面
             @Override
             public void onClick(View v) {
-                Intent intent_register = new Intent(MainActivity.this, RegisterActivity.class);
+                Intent intent_register = new Intent(MainActivity.this, VerificationActivity.class);
                 startActivity(intent_register);
             }
         });
