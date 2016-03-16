@@ -88,7 +88,7 @@ public class RegisterActivity extends Activity {
                         break;
                     case SHOW_REGISTER_FAILED:
                         //显示注册失败
-                        Toast.makeText(getApplicationContext(), "注册失败", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "用户名已存在,注册失败", Toast.LENGTH_SHORT).show();
                         break;
                     case SHOW_SOCKETTIMOUT:
                         //显示连接超时
@@ -122,6 +122,7 @@ public class RegisterActivity extends Activity {
 
                         //提取用户输入的用户名,密码和二次密码
                         String strUserName = bundle.getString("phoneNums");
+                        //String strUserName = "15911135092";
                         String strUserPassword = ediUserPassword.getText().toString();
                         String strUserPasswordCheck = ediUserPasswordCheck.getText().toString();
                         if (!checkPasswordLength(strUserPassword)) {

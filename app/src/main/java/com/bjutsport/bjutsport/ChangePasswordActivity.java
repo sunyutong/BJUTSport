@@ -44,7 +44,10 @@ public class ChangePasswordActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //设置标题为空
         requestWindowFeature(Window.FEATURE_NO_TITLE);
+
         setContentView(R.layout.activity_change_password);
 
         //设置状态栏为透明
@@ -114,11 +117,12 @@ public class ChangePasswordActivity extends AppCompatActivity {
                     public void run() {
                         //获得密码,二次输入密码EditText
                         EditText ediUserPassword, ediUserPasswordCheck;
-                        ediUserPassword = (EditText) findViewById(R.id.EditText_Register_userPassword);
-                        ediUserPasswordCheck = (EditText) findViewById(R.id.EditText_Register_userPassword_Check);
+                        ediUserPassword = (EditText) findViewById(R.id.EditText_ChangePassword_userPassword);
+                        ediUserPasswordCheck = (EditText) findViewById(R.id.EditText_ChangePassword_userPassword_Check);
 
                         //提取用户输入的用户名,密码和二次密码
                         String strUserName = bundle.getString("phoneNums");
+                        //String strUserName = "15911135092";
                         String strUserPassword = ediUserPassword.getText().toString();
                         String strUserPasswordCheck = ediUserPasswordCheck.getText().toString();
                         if (!checkPasswordLength(strUserPassword)) {
