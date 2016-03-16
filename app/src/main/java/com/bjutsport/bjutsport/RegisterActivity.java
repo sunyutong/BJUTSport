@@ -32,13 +32,11 @@ public class RegisterActivity extends Activity {
     private static final int SHOW_PASSWORD_UNCONSISTENT = 0x0000;
     private static final int SHOW_REGISTER_SUCCESS = 0x0001;
     private static final int SHOW_REGISTER_FAILED = 0x0002;
-    private static final int SHOW_USERNAME_ALREADY_EXIST = 0x0003;
-    private static final int SHOW_SOCKETTIMOUT = 0x0004;
-    private static final int JUMP_TO_LOGINACTIVITY = 0x0005;
+    private static final int SHOW_SOCKETTIMOUT = 0x0003;
+    private static final int JUMP_TO_LOGINACTIVITY = 0x0004;
 
     private static final int REGISTER_SUCCESS = 1;
     private static final int REGISTER_FAILED = 0;
-    private static final int USERNAME_ALLREADY_EXIST = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,9 +81,6 @@ public class RegisterActivity extends Activity {
                     case SHOW_REGISTER_FAILED:
                         //显示注册失败
                         Toast.makeText(getApplicationContext(), "注册失败", Toast.LENGTH_SHORT).show();
-                        break;
-                    case SHOW_USERNAME_ALREADY_EXIST:
-                        Toast.makeText(getApplicationContext(), "用户名已存在", Toast.LENGTH_SHORT).show();
                         break;
                     case SHOW_SOCKETTIMOUT:
                         //显示连接超时
@@ -169,10 +164,6 @@ public class RegisterActivity extends Activity {
                                     case REGISTER_FAILED:
                                         //如果服务器返回值为flase,则发送消息以显示注册失败
                                         registerHandler.sendEmptyMessage(SHOW_REGISTER_FAILED);
-                                        break;
-                                    case USERNAME_ALLREADY_EXIST:
-                                        //如果服务器返回值为flase,则发送消息以显示注册失败
-                                        registerHandler.sendEmptyMessage(SHOW_USERNAME_ALREADY_EXIST);
                                         break;
                                     default:
                                         break;
