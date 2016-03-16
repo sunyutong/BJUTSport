@@ -245,6 +245,7 @@ public class VerificationActivity extends Activity implements OnClickListener {
                         bundle.putString("phoneNums", phoneNums);
                         intent.putExtras(bundle);
                         startActivity(intent);
+                        finish();
                     } else if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE) {
                         Toast.makeText(getApplicationContext(), "验证码已经发送", Toast.LENGTH_SHORT).show();
                     } else {
