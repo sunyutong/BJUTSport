@@ -50,13 +50,10 @@ public class VerificationActivity extends Activity implements OnClickListener {
 
     // 手机号输入框
     private EditText inputPhoneEt;
-
     // 验证码输入框
     private EditText inputCodeEt;
-
     // 获取验证码按钮
     private Button requestCodeBtn;
-
     // 注册按钮
     private Button commitBtn;
 
