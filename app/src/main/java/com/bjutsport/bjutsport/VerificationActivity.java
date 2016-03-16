@@ -50,13 +50,10 @@ public class VerificationActivity extends Activity implements OnClickListener {
 
     // 手机号输入框
     private EditText inputPhoneEt;
-
     // 验证码输入框
     private EditText inputCodeEt;
-
     // 获取验证码按钮
     private Button requestCodeBtn;
-
     // 注册按钮
     private Button commitBtn;
 
@@ -74,6 +71,8 @@ public class VerificationActivity extends Activity implements OnClickListener {
         button_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent_Main = new Intent(VerificationActivity.this, MainActivity.class);
+                startActivity(intent_Main);
                 finish();
             }
         });
@@ -248,6 +247,7 @@ public class VerificationActivity extends Activity implements OnClickListener {
                         bundle.putString("phoneNums", phoneNums);
                         intent.putExtras(bundle);
                         startActivity(intent);
+                        finish();
                     } else if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE) {
                         Toast.makeText(getApplicationContext(), "验证码已经发送", Toast.LENGTH_SHORT).show();
                     } else {

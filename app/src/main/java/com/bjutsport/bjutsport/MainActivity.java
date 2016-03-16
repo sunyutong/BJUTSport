@@ -36,6 +36,7 @@ public class MainActivity extends Activity {
             public void onClick(View v) {
                 Intent intent_login = new Intent(MainActivity.this, LoginActivity.class);
                 startActivity(intent_login);
+                finish();
             }
         });
 
@@ -48,6 +49,20 @@ public class MainActivity extends Activity {
             public void onClick(View v) {
                 Intent intent_register = new Intent(MainActivity.this, VerificationActivity.class);
                 startActivity(intent_register);
+                finish();
+            }
+        });
+
+        //获得跳过登陆按钮
+        Button ButtonSkipLogin = (Button)findViewById(R.id.Button_MainActivity_Skip_Login);
+        ButtonSkipLogin.setOnClickListener(new View.OnClickListener() {
+
+            //点击进入注册界面
+            @Override
+            public void onClick(View v) {
+                Intent intent_register = new Intent(MainActivity.this, UserActivity.class);
+                startActivity(intent_register);
+                finish();
             }
         });
     }

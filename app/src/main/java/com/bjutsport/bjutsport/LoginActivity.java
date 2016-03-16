@@ -55,6 +55,19 @@ public class LoginActivity extends Activity {
         button_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent_Main = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(intent_Main);
+                finish();
+            }
+        });
+
+        Button button_forget_password = (Button) findViewById(R.id.Button_LoginActivity_Forget_Password);
+        //点击返回主界面
+        button_forget_password.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent_Verification = new Intent(LoginActivity.this, VerificationActivity.class);
+                startActivity(intent_Verification);
                 finish();
             }
         });
