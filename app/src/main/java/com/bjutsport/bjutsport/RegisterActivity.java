@@ -55,10 +55,12 @@ public class RegisterActivity extends Activity {
 
         //获取返回按钮
         Button button_back = (Button) findViewById(R.id.Button_RegisterActivity_to_MainActivity);
-        //点击返回主界面
+        //点击返回核实界面
         button_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent_Verification = new Intent(RegisterActivity.this, VerificationActivity.class);
+                startActivity(intent_Verification);
                 finish();
             }
         });

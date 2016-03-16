@@ -19,6 +19,8 @@ public class UserActivity extends Activity {
         button_test.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent_Main = new Intent(UserActivity.this, MainActivity.class);
+                startActivity(intent_Main);
                 finish();
             }
         });

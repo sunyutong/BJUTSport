@@ -55,6 +55,8 @@ public class LoginActivity extends Activity {
         button_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent_Main = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(intent_Main);
                 finish();
             }
         });
