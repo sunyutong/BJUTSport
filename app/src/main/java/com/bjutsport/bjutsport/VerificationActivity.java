@@ -161,7 +161,8 @@ public class VerificationActivity extends Activity implements OnClickListener {
                                     if (state.equals("register")) {
                                         if (!judgePhoneNums(phoneNums)) {
                                             return;
-                                        } // 2. 通过sdk发送短信验证
+                                        }
+                                        // 2. 通过sdk发送短信验证
                                         SMSSDK.getVerificationCode("86", phoneNums);
 
                                         // 3. 把按钮变成不可点击，并且显示倒计时（正在获取）
@@ -185,6 +186,9 @@ public class VerificationActivity extends Activity implements OnClickListener {
                                             }
                                         }).start();
                                     } else if (state.equals("forgetPassword")) {
+                                        if (!judgePhoneNums(phoneNums)) {
+                                            return;
+                                        }
                                         //显示用户名不存在
                                         verficationHandler.sendEmptyMessage(SHOW_PHONE_NUMBER_DO_NOT_EXIST);
                                     }
@@ -196,7 +200,8 @@ public class VerificationActivity extends Activity implements OnClickListener {
                                     } else if (state.equals("forgetPassword")) {
                                         if (!judgePhoneNums(phoneNums)) {
                                             return;
-                                        } // 2. 通过sdk发送短信验证
+                                        }
+                                        // 2. 通过sdk发送短信验证
                                         SMSSDK.getVerificationCode("86", phoneNums);
 
                                         // 3. 把按钮变成不可点击，并且显示倒计时（正在获取）
