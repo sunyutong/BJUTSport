@@ -61,6 +61,17 @@ public class LoginActivity extends Activity {
             }
         });
 
+        Button button_forget_password = (Button) findViewById(R.id.Button_LoginActivity_Forget_Password);
+        //点击返回主界面
+        button_forget_password.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent_Verification = new Intent(LoginActivity.this, VerificationActivity.class);
+                startActivity(intent_Verification);
+                finish();
+            }
+        });
+
         //Login的Handler
         final Handler loginHandler = new Handler() {
             @Override

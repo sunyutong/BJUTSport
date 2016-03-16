@@ -53,6 +53,8 @@
             android:layout_alignEnd="@+id/LinearLayout_MainActivity_1"
             android:textColor="#c6c6c6"
             android:background="#00ffffff"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            android:layout_marginBottom="2dp"
+            android:enabled="true" />
     </RelativeLayout>
 </LinearLayout>
