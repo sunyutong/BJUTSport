@@ -10,4 +10,7 @@
     <string name="verification">验证</string>
     <string name="ForgetPW">忘记密码</string>
     <string name="skip_login">跳过登录</string>
+    <string name="verificate_phone_number">验证手机号</string>
+    <string name="change_password">修改密码</string>
+    <string name="change">修改</string>
 </resources>

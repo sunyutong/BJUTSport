@@ -29,7 +29,7 @@
             android:textColor="#f8f8f8"
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true"
-            android:id="@+id/TextView_Register" />
+            android:id="@+id/TextView_Register_Title" />
 
     </RelativeLayout>
 
@@ -70,7 +70,7 @@
             android:gravity="center" />
 
         <Button
-            android:id="@+id/Button_Verification"
+            android:id="@+id/Button_Register_Verification"
             android:layout_width="200dp"
             android:layout_height="50dp"
             android:background="@drawable/btn_login_login"

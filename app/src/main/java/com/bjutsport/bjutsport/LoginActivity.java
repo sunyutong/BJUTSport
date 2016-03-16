@@ -49,6 +49,7 @@ public class LoginActivity extends Activity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
+
         //获取返回按钮
         Button button_back = (Button) findViewById(R.id.Button_LoginActivity_Back);
         //点击返回主界面
@@ -61,13 +62,19 @@ public class LoginActivity extends Activity {
             }
         });
 
+        //获取忘记密码按钮
         Button button_forget_password = (Button) findViewById(R.id.Button_LoginActivity_Forget_Password);
-        //点击返回主界面
+        //点击进入核实界面
         button_forget_password.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent_Verification = new Intent(LoginActivity.this, VerificationActivity.class);
-                startActivity(intent_Verification);
+                Intent intent_verification = new Intent(LoginActivity.this, VerificationActivity.class);
+                Bundle bundle = new Bundle();
+                String state = "forgetPassword";
+                //传送核实状态到VerificationActivity
+                bundle.putString("state", state);
+                intent_verification.putExtras(bundle);
+                startActivity(intent_verification);
                 finish();
             }
         });

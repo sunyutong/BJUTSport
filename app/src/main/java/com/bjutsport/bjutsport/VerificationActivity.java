@@ -40,13 +40,16 @@ public class VerificationActivity extends Activity implements OnClickListener {
     private static final String METHOD_NAME = "validateUsername";
 
     private static final int SHOW_PHONE_NUMBER_ALREADY_EXIST = 0x0000;
-    private static final int SHOW_SOCKETTIMOUT = 0x0001;
+    private static final int SHOW_PHONE_NUMBER_DO_NOT_EXIST = 0x0001;
+    private static final int SHOW_SOCKETTIMOUT = 0x0002;
 
     private static final int VALIDATE_SUCCESS = 1;
     private static final int VALIDATE_FAILED = 0;
 
     private static final int TIME_LIMIT = 30;
     private static int leftTime = TIME_LIMIT;
+
+    private static String state;
 
     // 手机号输入框
     private EditText inputPhoneEt;
@@ -62,6 +65,7 @@ public class VerificationActivity extends Activity implements OnClickListener {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_verification);
+
         //设置状态栏为透明
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -77,6 +81,8 @@ public class VerificationActivity extends Activity implements OnClickListener {
             }
         });
 
+        Bundle thisBundle = this.getIntent().getExtras();
+        state = thisBundle.getString("state");
         //启动短信验证功能
         init();
     }
@@ -86,11 +92,11 @@ public class VerificationActivity extends Activity implements OnClickListener {
         //获取手机号输入框
         inputPhoneEt = (EditText) findViewById(R.id.EditText_Verification_userName);
         //获取验证码输入框
-        inputCodeEt = (EditText) findViewById(R.id.EditText_Verification_verificationCode);
+        inputCodeEt = (EditText) findViewById(R.id.EditText_Verfication_verificationCode);
         //获取获取验证码按钮
         requestCodeBtn = (Button) findViewById(R.id.Button_Verification_getVerificationCode);
         //获取验证按钮
-        commitBtn = (Button) findViewById(R.id.Button_Verification);
+        commitBtn = (Button) findViewById(R.id.Button_Verification_Verification);
         //设置按钮的ClickListener
         requestCodeBtn.setOnClickListener(this);
         commitBtn.setOnClickListener(this);
@@ -150,39 +156,70 @@ public class VerificationActivity extends Activity implements OnClickListener {
                             //解析返回结果
                             int result = Integer.parseInt(returnedValue.getPropertyAsString(0));
 
-                            System.out.println(result);
-
                             switch (result) {
                                 case VALIDATE_SUCCESS:
-                                    if (!judgePhoneNums(phoneNums)) {
-                                        return;
-                                    } // 2. 通过sdk发送短信验证
-                                    SMSSDK.getVerificationCode("86", phoneNums);
+                                    if (state.equals("register")) {
+                                        if (!judgePhoneNums(phoneNums)) {
+                                            return;
+                                        } // 2. 通过sdk发送短信验证
+                                        SMSSDK.getVerificationCode("86", phoneNums);
 
-                                    // 3. 把按钮变成不可点击，并且显示倒计时（正在获取）
-                                    requestCodeBtn.setClickable(false);
-                                    handler.sendEmptyMessage(-9);
-                                    new Thread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            for (leftTime = TIME_LIMIT; leftTime > 0; leftTime--) {
-                                                handler.sendEmptyMessage(-9);
-                                                if (leftTime <= 0) {
-                                                    break;
+                                        // 3. 把按钮变成不可点击，并且显示倒计时（正在获取）
+                                        requestCodeBtn.setClickable(false);
+                                        handler.sendEmptyMessage(-9);
+                                        new Thread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                for (leftTime = TIME_LIMIT; leftTime > 0; leftTime--) {
+                                                    handler.sendEmptyMessage(-9);
+                                                    if (leftTime <= 0) {
+                                                        break;
+                                                    }
+                                                    try {
+                                                        Thread.sleep(1000);
+                                                    } catch (InterruptedException e) {
+                                                        e.printStackTrace();
+                                                    }
                                                 }
-                                                try {
-                                                    Thread.sleep(1000);
-                                                } catch (InterruptedException e) {
-                                                    e.printStackTrace();
-                                                }
+                                                handler.sendEmptyMessage(-8);
                                             }
-                                            handler.sendEmptyMessage(-8);
-                                        }
-                                    }).start();
+                                        }).start();
+                                    } else if (state.equals("forgetPassword")) {
+                                        //显示用户名不存在
+                                        verficationHandler.sendEmptyMessage(SHOW_PHONE_NUMBER_DO_NOT_EXIST);
+                                    }
                                     break;
                                 case VALIDATE_FAILED:
-                                    //显示用户名已存在
-                                    verficationHandler.sendEmptyMessage(SHOW_PHONE_NUMBER_ALREADY_EXIST);
+                                    if (state.equals("register")) {
+                                        //显示用户名已存在
+                                        verficationHandler.sendEmptyMessage(SHOW_PHONE_NUMBER_ALREADY_EXIST);
+                                    } else if (state.equals("forgetPassword")) {
+                                        if (!judgePhoneNums(phoneNums)) {
+                                            return;
+                                        } // 2. 通过sdk发送短信验证
+                                        SMSSDK.getVerificationCode("86", phoneNums);
+
+                                        // 3. 把按钮变成不可点击，并且显示倒计时（正在获取）
+                                        requestCodeBtn.setClickable(false);
+                                        handler.sendEmptyMessage(-9);
+                                        new Thread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                for (leftTime = TIME_LIMIT; leftTime > 0; leftTime--) {
+                                                    handler.sendEmptyMessage(-9);
+                                                    if (leftTime <= 0) {
+                                                        break;
+                                                    }
+                                                    try {
+                                                        Thread.sleep(1000);
+                                                    } catch (InterruptedException e) {
+                                                        e.printStackTrace();
+                                                    }
+                                                }
+                                                handler.sendEmptyMessage(-8);
+                                            }
+                                        }).start();
+                                    }
                                     break;
                             }
                         } catch (SocketTimeoutException ste) {
@@ -196,9 +233,8 @@ public class VerificationActivity extends Activity implements OnClickListener {
                 }).start();
                 break;
 
-            case R.id.Button_Verification:
-                SMSSDK.submitVerificationCode("86", phoneNums, inputCodeEt
-                        .getText().toString());
+            case R.id.Button_Verification_Verification:
+                SMSSDK.submitVerificationCode("86", phoneNums, inputCodeEt.getText().toString());
                 createProgressBar();
                 break;
 
@@ -218,6 +254,10 @@ public class VerificationActivity extends Activity implements OnClickListener {
                 case SHOW_PHONE_NUMBER_ALREADY_EXIST:
                     //显示该手机号已注册
                     Toast.makeText(getApplicationContext(), "该手机号已注册", Toast.LENGTH_SHORT).show();
+                    break;
+                case SHOW_PHONE_NUMBER_DO_NOT_EXIST:
+                    //显示该手机号未注册
+                    Toast.makeText(getApplicationContext(), "该手机号未注册", Toast.LENGTH_SHORT).show();
                     break;
             }
         }
@@ -240,12 +280,17 @@ public class VerificationActivity extends Activity implements OnClickListener {
                     if (event == SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE) {
                         // 提交验证码成功
                         Toast.makeText(getApplicationContext(), "提交验证码成功", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(VerificationActivity.this, RegisterActivity.class);
-                        Bundle bundle = new Bundle();
+                        Intent intent = new Intent();
+                        if (state.equals("register")) {
+                            intent = new Intent(VerificationActivity.this, RegisterActivity.class);
+                        } else if (state.equals("forgetPassword")) {
+                            intent = new Intent(VerificationActivity.this, ChangePasswordActivity.class);
+                        }
+                        final Bundle nextBundle = new Bundle();
                         String phoneNums = inputPhoneEt.getText().toString();
                         //传送手机号码到RegisterActivity
-                        bundle.putString("phoneNums", phoneNums);
-                        intent.putExtras(bundle);
+                        nextBundle.putString("phoneNums", phoneNums);
+                        intent.putExtras(nextBundle);
                         startActivity(intent);
                         finish();
                     } else if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE) {

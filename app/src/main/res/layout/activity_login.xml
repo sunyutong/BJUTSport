@@ -28,7 +28,8 @@
             android:layout_centerVertical="true"
             android:text="@string/login"
             android:textColor="#f8f8f8"
-            android:textSize="13dp" />
+            android:textSize="13sp"
+            android:id="@+id/TextView_LoginActivity_Title" />
 
     </RelativeLayout>
 
