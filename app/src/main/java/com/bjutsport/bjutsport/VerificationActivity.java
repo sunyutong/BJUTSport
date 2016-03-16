@@ -43,10 +43,11 @@ public class VerificationActivity extends Activity implements OnClickListener {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_verification);
+        //设置状态栏为透明
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            // 透明状态栏
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
+
         Button button_back = (Button)findViewById(R.id.Button_VerificationActivity_to_MainActivity);
         button_back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,6 +56,7 @@ public class VerificationActivity extends Activity implements OnClickListener {
             }
         });
 
+        //启动短信验证功能
         init();
     }
 
@@ -67,7 +69,7 @@ public class VerificationActivity extends Activity implements OnClickListener {
         commitBtn.setOnClickListener(this);
 
         // 启动短信验证sdk
-        SMSSDK.initSDK(this, "104fba9b27198", "6e09beed8fb23fd2239d1591f85ede63");
+        SMSSDK.initSDK(this, "1078349557343", "d3f4fb16542a1df1aa3f26ad1708db8b");
         EventHandler eventHandler = new EventHandler(){
             @Override
             public void afterEvent(int event, int result, Object data) {
@@ -90,7 +92,8 @@ public class VerificationActivity extends Activity implements OnClickListener {
                 // 1. 通过规则判断手机号
                 if (!judgePhoneNums(phoneNums)) {
                     return;
-                } // 2. 通过sdk发送短信验证
+                }
+                // 2. 通过sdk发送短信验证
                 SMSSDK.getVerificationCode("86", phoneNums);
 
                 // 3. 把按钮变成不可点击，并且显示倒计时（正在获取）
@@ -142,16 +145,18 @@ public class VerificationActivity extends Activity implements OnClickListener {
                 Object data = msg.obj;
                 Log.e("event", "event=" + event);
                 if (result == SMSSDK.RESULT_COMPLETE) {
-                    // 短信注册成功后,前往RegisterActivity,然后提示
-                    if (event == SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE) {// 提交验证码成功
-                        Toast.makeText(getApplicationContext(), "提交验证码成功",
-                                Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(VerificationActivity.this,
-                                RegisterActivity.class);
+                    // 短信注册成功后,前往RegisterActivity,然后提示提交验证码成功
+                    if (event == SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE) {
+                        Toast.makeText(getApplicationContext(), "提交验证码成功", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(VerificationActivity.this, RegisterActivity.class);
+                        String phoneNums = inputPhoneEt.getText().toString();
+                        Bundle bundle = new Bundle();
+                        //传送手机号码到RegisterActivity
+                        bundle.putString("phoneNums", phoneNums);
+                        intent.putExtras(bundle);
                         startActivity(intent);
                     } else if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE) {
-                        Toast.makeText(getApplicationContext(), "验证码已经发送",
-                                Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "验证码已经发送", Toast.LENGTH_SHORT).show();
                     } else {
                         ((Throwable) data).printStackTrace();
                     }

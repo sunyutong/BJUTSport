@@ -40,18 +40,6 @@
         android:orientation="vertical">
 
         <EditText
-            android:id="@+id/EditText_Verification_userName"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="#ffffff"
-            android:hint="@string/name_tip"
-            android:textSize="11sp"
-            android:singleLine="true"
-            android:textColorHint="#7f7f7f7f"
-            android:layout_marginTop="1dp"
-            android:gravity="center" />
-
-        <EditText
             android:id="@+id/EditText_Register_userPassword"
             android:layout_width="match_parent"
             android:layout_height="50dp"
@@ -64,8 +52,7 @@
             android:password="true"
             android:layout_alignParentStart="false"
             android:layout_marginTop="1dp"
-            android:gravity="center"
-            android:layout_below="@+id/EditText_Verification_userName" />
+            android:gravity="center" />
 
         <EditText
             android:id="@+id/EditText_Register_userPassword_Check"
@@ -94,16 +81,7 @@
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="28dp"
-            android:layout_below="@+id/TextView_Register_Result" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/TextView_Register_Result"
-            android:layout_below="@+id/EditText_Register_userPassword_Check"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="12dp"
-            android:textSize="12sp" />
+            android:layout_below="@+id/EditText_Register_userPassword_Check" />
 
     </RelativeLayout>
 </LinearLayout>

@@ -56,6 +56,6 @@
             android:layout_marginRight="6dp"
             android:text="@string/skip_login"
             android:textColor="#a4a4a4"
-            android:textSize="14dp" />
+            android:textSize="14sp" />
     </RelativeLayout>
 </LinearLayout>
