@@ -36,7 +36,6 @@ public class MainActivity extends Activity {
             public void onClick(View v) {
                 Intent intent_login = new Intent(MainActivity.this, LoginActivity.class);
                 startActivity(intent_login);
-                finish();
             }
         });
 
@@ -54,7 +53,6 @@ public class MainActivity extends Activity {
                 bundle.putString("state", state);
                 intent_verification.putExtras(bundle);
                 startActivity(intent_verification);
-                finish();
             }
         });
 
@@ -67,7 +65,6 @@ public class MainActivity extends Activity {
             public void onClick(View v) {
                 Intent intent_register = new Intent(MainActivity.this, UserActivity.class);
                 startActivity(intent_register);
-                finish();
             }
         });
     }
