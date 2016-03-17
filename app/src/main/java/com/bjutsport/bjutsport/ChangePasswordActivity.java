@@ -1,11 +1,11 @@
 package com.bjutsport.bjutsport;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -13,33 +13,33 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.bjutsport.aes.AESUtil;
+
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 
-import com.bjutsport.aes.AESUtil;
-
 import java.net.SocketTimeoutException;
 
-public class RegisterActivity extends Activity {
+public class ChangePasswordActivity extends AppCompatActivity {
 
     private static final String AES_KEY = "BJUTSport1234567";
     private static final String WEBSERVICE_WSDL_URL = "http://192.168.1.102:8080/BJUTSport/services/RegisterImplPort?wsdl";
     private static final String WEBSERVICE_NAMESPACE = "http://register.bjutsport.com/";
-    private static final String METHOD_NAME = "register";
+    private static final String METHOD_NAME = "changePassword";
 
     private static final int SHOW_PASSWORD_UNCONSISTENT = 0x0000;
-    private static final int SHOW_REGISTER_SUCCESS = 0x0001;
-    private static final int SHOW_REGISTER_FAILED = 0x0002;
+    private static final int SHOW_CHANGE_SUCCESS = 0x0001;
+    private static final int SHOW_CHANGE_FAILED = 0x0002;
     private static final int SHOW_SOCKETTIMOUT = 0x0003;
     private static final int SHOW_PASSWORD_TOO_SHORT = 0x0004;
     private static final int JUMP_TO_LOGINACTIVITY = 0x0005;
 
     private static final int passwordLength = 8;
 
-    private static final int REGISTER_SUCCESS = 1;
-    private static final int REGISTER_FAILED = 0;
+    private static final int CHANGE_SUCCESS = 1;
+    private static final int CHANGE_FAILED = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,20 +48,20 @@ public class RegisterActivity extends Activity {
         //设置标题为空
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-        setContentView(R.layout.activity_register);
+        setContentView(R.layout.activity_change_password);
 
+        //设置状态栏为透明
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            // 透明状态栏
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
 
         //获取返回按钮
-        Button button_back = (Button) findViewById(R.id.Button_RegisterActivity_to_MainActivity);
+        Button button_back = (Button) findViewById(R.id.Button_ChangePasswordActivity_to_MainActivity);
         //点击返回核实界面
         button_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent_Verification = new Intent(RegisterActivity.this, VerificationActivity.class);
+                Intent intent_Verification = new Intent(ChangePasswordActivity.this, MainActivity.class);
                 startActivity(intent_Verification);
                 finish();
             }
@@ -82,13 +82,13 @@ public class RegisterActivity extends Activity {
                         //显示密码前后不一致
                         Toast.makeText(getApplicationContext(), "密码前后不一致", Toast.LENGTH_SHORT).show();
                         break;
-                    case SHOW_REGISTER_SUCCESS:
-                        //显示注册成功
-                        Toast.makeText(getApplicationContext(), "注册成功", Toast.LENGTH_SHORT).show();
+                    case SHOW_CHANGE_SUCCESS:
+                        //显示修改成功
+                        Toast.makeText(getApplicationContext(), "修改成功", Toast.LENGTH_SHORT).show();
                         break;
-                    case SHOW_REGISTER_FAILED:
+                    case SHOW_CHANGE_FAILED:
                         //显示注册失败
-                        Toast.makeText(getApplicationContext(), "用户名已存在,注册失败", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "修改失败", Toast.LENGTH_SHORT).show();
                         break;
                     case SHOW_SOCKETTIMOUT:
                         //显示连接超时
@@ -96,7 +96,7 @@ public class RegisterActivity extends Activity {
                         break;
                     case JUMP_TO_LOGINACTIVITY:
                         //跳转到用户界面
-                        Intent intent_User = new Intent(RegisterActivity.this, LoginActivity.class);
+                        Intent intent_User = new Intent(ChangePasswordActivity.this, LoginActivity.class);
                         startActivity(intent_User);
                         finish();
                         break;
@@ -107,7 +107,7 @@ public class RegisterActivity extends Activity {
         };
 
         //获取注册按钮
-        Button button_register = (Button) findViewById(R.id.Button_Register_Verification);
+        Button button_register = (Button) findViewById(R.id.Button_ChangePassword_Verification);
         button_register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -117,8 +117,8 @@ public class RegisterActivity extends Activity {
                     public void run() {
                         //获得密码,二次输入密码EditText
                         EditText ediUserPassword, ediUserPasswordCheck;
-                        ediUserPassword = (EditText) findViewById(R.id.EditText_Register_userPassword);
-                        ediUserPasswordCheck = (EditText) findViewById(R.id.EditText_Register_userPassword_Check);
+                        ediUserPassword = (EditText) findViewById(R.id.EditText_ChangePassword_userPassword);
+                        ediUserPasswordCheck = (EditText) findViewById(R.id.EditText_ChangePassword_userPassword_Check);
 
                         //提取用户输入的用户名,密码和二次密码
                         String strUserName = bundle.getString("phoneNums");
@@ -166,15 +166,15 @@ public class RegisterActivity extends Activity {
                                 int result = Integer.parseInt(returnedValue.getPropertyAsString(0));
 
                                 switch (result) {
-                                    case REGISTER_SUCCESS:
-                                        //如果服务器返回值为true,则发送消息以显示注册成功
-                                        registerHandler.sendEmptyMessage(SHOW_REGISTER_SUCCESS);
+                                    case CHANGE_SUCCESS:
+                                        //如果服务器返回值为true,则发送消息以显示更改成功
+                                        registerHandler.sendEmptyMessage(SHOW_CHANGE_SUCCESS);
                                         Thread.sleep(300);
                                         registerHandler.sendEmptyMessage(JUMP_TO_LOGINACTIVITY);
                                         break;
-                                    case REGISTER_FAILED:
-                                        //如果服务器返回值为flase,则发送消息以显示注册失败
-                                        registerHandler.sendEmptyMessage(SHOW_REGISTER_FAILED);
+                                    case CHANGE_FAILED:
+                                        //如果服务器返回值为flase,则发送消息以显示更改失败
+                                        registerHandler.sendEmptyMessage(SHOW_CHANGE_FAILED);
                                         break;
                                     default:
                                         break;

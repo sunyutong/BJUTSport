@@ -24,13 +24,12 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="2dp"
-                android:layout_marginLeft="1dp"
                 android:layout_marginRight="1dp"
                 android:layout_weight="1"
                 android:background="@drawable/btn_main_login"
                 android:text="@string/login"
                 android:textColor="#303030"
-                android:textSize="10dp" />
+                android:textSize="10sp" />
 
             <Button
                 android:id="@+id/Button_MainActivity_Register"
@@ -38,24 +37,24 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="2dp"
                 android:layout_marginLeft="1dp"
-                android:layout_marginRight="1dp"
                 android:layout_weight="1"
                 android:background="@drawable/btn_main_register"
                 android:text="@string/register"
                 android:textColor="#c6c6c6"
-                android:textSize="10dp" />
+                android:textSize="10sp" />
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/TextView_MainActivity_Skip_Login"
+        <Button
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="32dp"
+            android:text="@string/skip_login"
+            android:id="@+id/Button_MainActivity_Skip_Login"
             android:layout_above="@+id/LinearLayout_MainActivity_1"
             android:layout_alignEnd="@+id/LinearLayout_MainActivity_1"
-            android:layout_marginBottom="6dp"
-            android:layout_marginRight="6dp"
-            android:text="@string/skip_login"
-            android:textColor="#a4a4a4"
-            android:textSize="14dp" />
+            android:textColor="#c6c6c6"
+            android:background="#00ffffff"
+            android:textSize="14sp"
+            android:layout_marginBottom="2dp"
+            android:enabled="true" />
     </RelativeLayout>
 </LinearLayout>

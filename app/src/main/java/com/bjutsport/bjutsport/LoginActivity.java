@@ -13,6 +13,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.SoapObject;
@@ -21,17 +22,23 @@ import org.ksoap2.transport.HttpTransportSE;
 
 import com.bjutsport.aes.AESUtil;
 
+import java.net.SocketTimeoutException;
+
 public class LoginActivity extends Activity {
 
-    private static final String AES_KEY = "BJUTSports123456";
-    private static final String WEBSERVICE_WSDL_URL = "http://192.168.1.100:8080/BJUTSports/services/LoginImplPort";
-    private static final String WEBSERVICE_NAMESPACE = "http://login.bjutsports.com/";
-    private static final String METHOD_NAME = "authentication";
+    private static final String AES_KEY = "BJUTSport1234567";
+    private static final String WEBSERVICE_WSDL_URL = "http://192.168.1.102:8080/BJUTSport/services/LoginImplPort?wsdl";
+    private static final String WEBSERVICE_NAMESPACE = "http://login.bjutsport.com/";
+    private static final String METHOD_NAME = "login";
 
     private static final int SHOW_LOGIN_SUCCESS_IN_TEXTVIEW = 0x0000;
     private static final int SHOW_LOGIN_FAILED_IN_TEXTVIEW = 0x0001;
-    private static final int JUMP_TO_USERACTIVITY = 0x0002;
-    private static final int CHANGE_TRANSPARENCY = 0x0003;
+    private static final int SHOW_SOCKETTIMOUT = 0x0002;
+    private static final int JUMP_TO_USERACTIVITY = 0x0003;
+
+
+    private static final int LOGIN_SUCCESS = 1;
+    private static final int LOGIN_FAILED = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,64 +49,60 @@ public class LoginActivity extends Activity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
+
         //获取返回按钮
         Button button_back = (Button) findViewById(R.id.Button_LoginActivity_Back);
         //点击返回主界面
         button_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent_User = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(intent_User);
+                Intent intent_Main = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(intent_Main);
                 finish();
             }
         });
-        //获取TextView_Login_Result
-        final TextView loginResult;
-        loginResult = (TextView) findViewById(R.id.TextView_LoginActivity_Result);
 
-        //显示TextView_Login_Result中文本的Handler
-        final Handler showLoginResultHandler = new Handler() {
+        //获取忘记密码按钮
+        Button button_forget_password = (Button) findViewById(R.id.Button_LoginActivity_Forget_Password);
+        //点击进入核实界面
+        button_forget_password.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent_verification = new Intent(LoginActivity.this, VerificationActivity.class);
+                Bundle bundle = new Bundle();
+                String state = "forgetPassword";
+                //传送核实状态到VerificationActivity
+                bundle.putString("state", state);
+                intent_verification.putExtras(bundle);
+                startActivity(intent_verification);
+                finish();
+            }
+        });
+
+        //Login的Handler
+        final Handler loginHandler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
-                loginResult.setTextColor(Color.argb(255, 127, 127, 127));
                 switch (msg.what) {
                     case SHOW_LOGIN_SUCCESS_IN_TEXTVIEW:
                         //显示登录成功
-                        loginResult.setText("Login success！");
+                        Toast.makeText(getApplicationContext(), "登陆成功", Toast.LENGTH_SHORT).show();
                         break;
                     case SHOW_LOGIN_FAILED_IN_TEXTVIEW:
                         //显示登录失败
-                        loginResult.setText("Login failed, please try again！");
+                        Toast.makeText(getApplicationContext(), "登录失败,用户名或密码错误", Toast.LENGTH_SHORT).show();
+                        break;
+                    case SHOW_SOCKETTIMOUT:
+                        //显示连接超时
+                        Toast.makeText(getApplicationContext(), "连接超时,请检查网络连接", Toast.LENGTH_SHORT).show();
+                        break;
+                    case JUMP_TO_USERACTIVITY:
+                        Intent intent_User = new Intent(LoginActivity.this, UserActivity.class);
+                        startActivity(intent_User);
+                        finish();
                         break;
                     default:
                         break;
-                }
-            }
-        };
-
-        //获取登录成功消息的Handler
-        final Handler loginSuccessHandler = new Handler() {
-            @Override
-            public void handleMessage(Message msg) {
-                if (msg.what == JUMP_TO_USERACTIVITY) {
-                    //跳转到用户界面
-                    Intent intent_User = new Intent(LoginActivity.this, UserActivity.class);
-                    startActivity(intent_User);
-                    finish();
-                }
-            }
-        };
-
-        //设置TextView_Login_Result中文本的透明度的Handler
-        final Handler textViewChangeHandler = new Handler() {
-            //透明度初值
-            int i = 255;
-
-            @Override
-            public void handleMessage(Message msg) {
-                if (msg.what == CHANGE_TRANSPARENCY) {
-                    //每收到一次消息透明度减1
-                    loginResult.setTextColor(Color.argb(i--, 127, 127, 127));
                 }
             }
         };
@@ -110,7 +113,8 @@ public class LoginActivity extends Activity {
             @Override
             public void onClick(View v) {
                 //创建新的进程以进行网络访问
-                new Thread() {
+                new Thread(new Runnable() {
+                    @Override
                     public void run() {
                         //获得用户名与密码EditText
                         EditText ediUserName = (EditText) findViewById(R.id.EditText_LoginActivity_UserName);
@@ -133,7 +137,7 @@ public class LoginActivity extends Activity {
                             ruquest.addProperty("encryptedUserPassword", encryptedUserPassword);
 
                             //创建HttpTransportSE对象,并通过HttpTransportSE类的构造方法指定Webservice的WSDL文档的URL
-                            HttpTransportSE ht = new HttpTransportSE(WEBSERVICE_WSDL_URL);
+                            HttpTransportSE ht = new HttpTransportSE(WEBSERVICE_WSDL_URL, 1000);
 
                             //生成调用WebService方法的SOAP请求消息,该信息由SoapSerializationEnvelope描述
                             //SOAP版本号为1.1
@@ -150,64 +154,31 @@ public class LoginActivity extends Activity {
                             SoapObject returnedValue = (SoapObject) envelope.bodyIn;
 
                             //解析返回结果
-                            String result = returnedValue.getPropertyAsString(0);
+                            int result = Integer.parseInt(returnedValue.getPropertyAsString(0));
 
-                            if (result.equals("true")) {
-                                //如果服务器返回值为true,则发送消息以显示登陆成功
-                                showLoginResultHandler.sendEmptyMessage(SHOW_LOGIN_SUCCESS_IN_TEXTVIEW);
-                                //300毫秒后发送消息以从登录界面跳转至用户界面
-                                Thread.sleep(300);
-                                loginSuccessHandler.sendEmptyMessage(JUMP_TO_USERACTIVITY);
-                            } else {
-                                //如果服务器返回值为flase,则发送消息以显示登陆失败
-                                showLoginResultHandler.sendEmptyMessage(SHOW_LOGIN_FAILED_IN_TEXTVIEW);
-                                //发送消息以改变TextView中文本的透明度
-                                new Thread() {
-                                    public void run() {
-                                        for (int i = 0; i < 256; i++) {
-                                            try {
-                                                if (i == 0) {
-                                                    //非透明显示1秒后开始渐变
-                                                    Thread.sleep(1000);
-                                                } else {
-                                                    //每8毫秒发送发送一次消息
-                                                    Thread.sleep(8);
-                                                }
-                                            } catch (Exception e) {
-                                                e.printStackTrace();
-                                            }
-                                            //发送消息
-                                            textViewChangeHandler.sendEmptyMessage(CHANGE_TRANSPARENCY);
-                                        }
-                                    }
-                                }.start();
+                            switch (result) {
+                                case LOGIN_SUCCESS:
+                                    loginHandler.sendEmptyMessage(SHOW_LOGIN_SUCCESS_IN_TEXTVIEW);
+                                    //300毫秒后发送消息以从登录界面跳转至用户界面
+                                    Thread.sleep(300);
+                                    loginHandler.sendEmptyMessage(JUMP_TO_USERACTIVITY);
+                                    break;
+                                case LOGIN_FAILED:
+                                    //如果服务器返回值为flase,则发送消息以显示登陆失败
+                                    loginHandler.sendEmptyMessage(SHOW_LOGIN_FAILED_IN_TEXTVIEW);
+                                    break;
+                                default:
+                                    break;
                             }
+
+                        } catch (SocketTimeoutException ste) {
+                            //抛出异常以显示连接超时
+                            loginHandler.sendEmptyMessage(SHOW_SOCKETTIMOUT);
                         } catch (Exception e) {
-                            //抛出异常则发送消息以显示登陆失败
-                            showLoginResultHandler.sendEmptyMessage(SHOW_LOGIN_FAILED_IN_TEXTVIEW);
-                            new Thread() {
-                                public void run() {
-                                    for (int i = 0; i < 256; i++) {
-                                        try {
-                                            if (i == 0) {
-                                                //非透明显示1秒后开始渐变
-                                                Thread.sleep(1000);
-                                            } else {
-                                                //每8毫秒发送发送一次消息
-                                                Thread.sleep(8);
-                                            }
-                                        } catch (Exception e) {
-                                            e.printStackTrace();
-                                        }
-                                        //发送消息
-                                        textViewChangeHandler.sendEmptyMessage(CHANGE_TRANSPARENCY);
-                                    }
-                                }
-                            }.start();
                             e.printStackTrace();
                         }
                     }
-                }.start();
+                }).start();
             }
         });
     }
