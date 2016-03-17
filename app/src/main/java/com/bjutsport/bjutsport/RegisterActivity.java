@@ -25,7 +25,7 @@ import java.net.SocketTimeoutException;
 public class RegisterActivity extends Activity {
 
     private static final String AES_KEY = "BJUTSport1234567";
-    private static final String WEBSERVICE_WSDL_URL = "http://192.168.1.102:8080/BJUTSport/services/RegisterImplPort?wsdl";
+    private static final String WEBSERVICE_WSDL_URL = "http://192.168.1.101:8080/BJUTSport/services/RegisterImplPort?wsdl";
     private static final String WEBSERVICE_NAMESPACE = "http://register.bjutsport.com/";
     private static final String METHOD_NAME = "register";
 
