@@ -29,7 +29,7 @@
                 android:background="@drawable/btn_main_login"
                 android:text="@string/login"
                 android:textColor="#303030"
-                android:textSize="10dp" />
+                android:textSize="12sp" />
 
             <Button
                 android:id="@+id/Button_MainActivity_Register"
@@ -41,7 +41,7 @@
                 android:background="@drawable/btn_main_register"
                 android:text="@string/register"
                 android:textColor="#c6c6c6"
-                android:textSize="10dp" />
+                android:textSize="12sp" />
         </LinearLayout>
 
         <Button
@@ -52,7 +52,7 @@
             android:enabled="true"
             android:text="@string/skip_login"
             android:textColor="#a4a4a4"
-            android:textSize="14dp"
+            android:textSize="14sp"
             android:layout_above="@+id/LinearLayout_MainActivity_1"
             android:layout_alignParentEnd="true" />
     </RelativeLayout>

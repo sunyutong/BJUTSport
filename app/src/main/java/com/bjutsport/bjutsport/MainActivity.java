@@ -22,13 +22,13 @@ public class MainActivity extends Activity {
 
         //设置登录按钮的透明度值
         View button_login = findViewById(R.id.Button_MainActivity_Login);//找到你要设透明背景的layout 的id
-        button_login.getBackground().setAlpha(215);//0~255透明度值
+        button_login.getBackground().setAlpha(230);//0~255透明度值
         //设置注册按钮的透明度值
         View button_register = findViewById(R.id.Button_MainActivity_Register);//找到你要设透明背景的layout 的id
-        button_register.getBackground().setAlpha(215);//0~255透明度值
+        button_register.getBackground().setAlpha(230);//0~255透明度值
 
         //获取登录按钮
-        Button ButtonLogin = (Button)findViewById(R.id.Button_MainActivity_Login);
+        Button ButtonLogin = (Button) findViewById(R.id.Button_MainActivity_Login);
         ButtonLogin.setOnClickListener(new View.OnClickListener() {
 
             //点击进入登录界面
@@ -40,7 +40,7 @@ public class MainActivity extends Activity {
         });
 
         //获取注册按钮
-        Button ButtonRegister = (Button)findViewById(R.id.Button_MainActivity_Register);
+        Button ButtonRegister = (Button) findViewById(R.id.Button_MainActivity_Register);
         ButtonRegister.setOnClickListener(new View.OnClickListener() {
 
             //点击进入注册界面
@@ -57,7 +57,7 @@ public class MainActivity extends Activity {
         });
 
         //获得跳过登陆按钮
-        Button ButtonSkipLogin = (Button)findViewById(R.id.Button_MainActivity_Skip_Login);
+        Button ButtonSkipLogin = (Button) findViewById(R.id.Button_MainActivity_Skip_Login);
         ButtonSkipLogin.setOnClickListener(new View.OnClickListener() {
 
             //点击进入注册界面
