@@ -27,7 +27,7 @@ import java.net.SocketTimeoutException;
 public class LoginActivity extends Activity {
 
     private static final String AES_KEY = "BJUTSport1234567";
-    private static final String WEBSERVICE_WSDL_URL = "http://192.168.1.102:8080/BJUTSport/services/LoginImplPort?wsdl";
+    private static final String WEBSERVICE_WSDL_URL = "http://192.168.1.101:8080/BJUTSport/services/LoginImplPort?wsdl";
     private static final String WEBSERVICE_NAMESPACE = "http://login.bjutsport.com/";
     private static final String METHOD_NAME = "login";
 
@@ -56,8 +56,6 @@ public class LoginActivity extends Activity {
         button_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent_Main = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(intent_Main);
                 finish();
             }
         });
@@ -75,7 +73,6 @@ public class LoginActivity extends Activity {
                 bundle.putString("state", state);
                 intent_verification.putExtras(bundle);
                 startActivity(intent_verification);
-                finish();
             }
         });
 

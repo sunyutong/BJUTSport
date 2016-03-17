@@ -35,7 +35,7 @@ import java.net.SocketTimeoutException;
 public class VerificationActivity extends Activity implements OnClickListener {
 
     private static final String AES_KEY = "BJUTSport1234567";
-    private static final String WEBSERVICE_WSDL_URL = "http://192.168.1.102:8080/BJUTSport/services/RegisterImplPort?wsdl";
+    private static final String WEBSERVICE_WSDL_URL = "http://192.168.1.101:8080/BJUTSport/services/RegisterImplPort?wsdl";
     private static final String WEBSERVICE_NAMESPACE = "http://register.bjutsport.com/";
     private static final String METHOD_NAME = "validateUsername";
 
@@ -75,8 +75,6 @@ public class VerificationActivity extends Activity implements OnClickListener {
         button_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent_Main = new Intent(VerificationActivity.this, MainActivity.class);
-                startActivity(intent_Main);
                 finish();
             }
         });
