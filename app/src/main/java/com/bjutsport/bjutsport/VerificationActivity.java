@@ -3,7 +3,6 @@ package com.bjutsport.bjutsport;
 import cn.smssdk.EventHandler;
 import cn.smssdk.SMSSDK;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -33,7 +32,7 @@ import org.ksoap2.transport.HttpTransportSE;
 
 import java.net.SocketTimeoutException;
 
-public class VerificationActivity extends Activity implements OnClickListener {
+public class VerificationActivity extends BaseActivity implements OnClickListener {
     /**
      * 静态常量
      */

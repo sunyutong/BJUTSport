@@ -1,6 +1,5 @@
 package com.bjutsport.bjutsport;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -22,7 +21,7 @@ import com.bjutsport.aes.AESUtil;
 
 import java.net.SocketTimeoutException;
 
-public class RegisterActivity extends Activity {
+public class RegisterActivity extends BaseActivity {
     /**
      * 静态常量
      */
@@ -101,8 +100,8 @@ public class RegisterActivity extends Activity {
                         //跳转到用户界面
                         Intent intent_User = new Intent(RegisterActivity.this, UserActivity.class);
                         startActivity(intent_User);
-                        //结束全部活动
-                        finish();
+                        //结束全部活动除了用户界面
+                        ActivityCollector.finishAll();
                         break;
                     default:
                         break;

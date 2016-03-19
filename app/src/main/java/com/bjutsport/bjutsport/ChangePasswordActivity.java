@@ -1,11 +1,10 @@
 package com.bjutsport.bjutsport;
 
-import android.app.Activity;
+
 import android.content.Intent;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -23,7 +22,7 @@ import org.ksoap2.transport.HttpTransportSE;
 
 import java.net.SocketTimeoutException;
 
-public class ChangePasswordActivity extends Activity {
+public class ChangePasswordActivity extends BaseActivity {
 
     private static final String AES_KEY = "BJUTSport1234567";
     private static final String WEBSERVICE_WSDL_URL = "http://192.168.1.101:8080/BJUTSport/services/RegisterImplPort?wsdl";
