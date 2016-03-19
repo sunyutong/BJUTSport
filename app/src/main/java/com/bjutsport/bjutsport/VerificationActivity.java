@@ -2,7 +2,6 @@ package com.bjutsport.bjutsport;
 
 import cn.smssdk.EventHandler;
 import cn.smssdk.SMSSDK;
-
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -22,20 +21,20 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.FrameLayout.LayoutParams;
-
 import com.bjutsport.aes.AESUtil;
-
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
-
 import java.net.SocketTimeoutException;
 
 public class VerificationActivity extends BaseActivity implements OnClickListener {
+
+
     /**
      * 静态常量
      */
+
     //AES密钥
     private static final String AES_KEY = "BJUTSport1234567";
     //注册界面URL?
