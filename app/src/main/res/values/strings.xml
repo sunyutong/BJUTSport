@@ -1,16 +1,16 @@
 <resources>
-    <string name="app_name">BJUTSport</string>
-    <string name="name_tip">请输入手机号</string>
-    <string name="password_tip1">请输入密码</string>
+    <string name="app_name">工大体育</string>
+    <string name="name_tip">输入您的手机号</string>
+    <string name="password_tip1">请输入你的密码</string>
     <string name="password_tip2">请再次输入密码</string>
     <string name="login">登录</string>
     <string name="identifying_code">请输入验证码</string>
-    <string name="get_identifying_code">获取验证码</string>
+    <string name="get_identifying_code">获取</string>
     <string name="register">注册</string>
-    <string name="verification">验证</string>
+    <string name="verification">提交</string>
     <string name="ForgetPW">忘记密码</string>
     <string name="skip_login">跳过登录</string>
-    <string name="verificate_phone_number">验证手机号</string>
+    <string name="verificate_phone_number">验证验证码</string>
     <string name="change_password">修改密码</string>
     <string name="change">修改</string>
 </resources>

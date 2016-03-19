@@ -1,6 +1,10 @@
 package com.bjutsport.bjutsport;
 
+<<<<<<< HEAD
 import android.app.Activity;
+=======
+
+>>>>>>> refs/remotes/origin/Lichee's-branch
 import android.content.Intent;
 import android.os.Build;
 import android.os.Handler;
@@ -22,7 +26,11 @@ import org.ksoap2.transport.HttpTransportSE;
 
 import java.net.SocketTimeoutException;
 
+<<<<<<< HEAD
 public class ChangePasswordActivity extends Activity {
+=======
+public class ChangePasswordActivity extends BaseActivity {
+>>>>>>> refs/remotes/origin/Lichee's-branch
 
     private static final String AES_KEY = "BJUTSport1234567";
     private static final String WEBSERVICE_WSDL_URL = "http://192.168.1.101:8080/BJUTSport/services/RegisterImplPort?wsdl";
@@ -32,7 +40,7 @@ public class ChangePasswordActivity extends Activity {
     private static final int SHOW_PASSWORD_UNCONSISTENT = 0x0000;
     private static final int SHOW_CHANGE_SUCCESS = 0x0001;
     private static final int SHOW_CHANGE_FAILED = 0x0002;
-    private static final int SHOW_SOCKETTIMOUT = 0x0003;
+    private static final int SHOW_SOCKETTIMEOUT = 0x0003;
     private static final int SHOW_PASSWORD_TOO_SHORT = 0x0004;
     private static final int JUMP_TO_LOGINACTIVITY = 0x0005;
 
@@ -90,7 +98,7 @@ public class ChangePasswordActivity extends Activity {
                         //显示注册失败
                         Toast.makeText(getApplicationContext(), "修改失败", Toast.LENGTH_SHORT).show();
                         break;
-                    case SHOW_SOCKETTIMOUT:
+                    case SHOW_SOCKETTIMEOUT:
                         //显示连接超时
                         Toast.makeText(getApplicationContext(), "连接超时,请检查网络连接", Toast.LENGTH_SHORT).show();
                         break;
@@ -182,7 +190,7 @@ public class ChangePasswordActivity extends Activity {
 
                             } catch (SocketTimeoutException ste) {
                                 //抛出异常以显示连接超时
-                                registerHandler.sendEmptyMessage(SHOW_SOCKETTIMOUT);
+                                registerHandler.sendEmptyMessage(SHOW_SOCKETTIMEOUT);
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }

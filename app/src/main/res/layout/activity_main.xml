@@ -16,8 +16,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="2dp"
-            android:layout_marginLeft="2dp"
-            android:layout_marginRight="2dp">
+            android:layout_marginLeft="1dp"
+            android:layout_marginRight="1dp">
 
             <Button
                 android:id="@+id/Button_MainActivity_Login"
@@ -29,7 +29,7 @@
                 android:background="@drawable/btn_main_login"
                 android:text="@string/login"
                 android:textColor="#303030"
-                android:textSize="10sp" />
+                android:textSize="12sp" />
 
             <Button
                 android:id="@+id/Button_MainActivity_Register"
@@ -41,20 +41,19 @@
                 android:background="@drawable/btn_main_register"
                 android:text="@string/register"
                 android:textColor="#c6c6c6"
-                android:textSize="10sp" />
+                android:textSize="12sp" />
         </LinearLayout>
 
         <Button
-            android:layout_width="wrap_content"
-            android:layout_height="32dp"
-            android:text="@string/skip_login"
             android:id="@+id/Button_MainActivity_Skip_Login"
-            android:layout_above="@+id/LinearLayout_MainActivity_1"
-            android:layout_alignEnd="@+id/LinearLayout_MainActivity_1"
-            android:textColor="#c6c6c6"
+            android:layout_width="70dp"
+            android:layout_height="30dp"
             android:background="#00ffffff"
+            android:enabled="true"
+            android:text="@string/skip_login"
+            android:textColor="#a4a4a4"
             android:textSize="14sp"
-            android:layout_marginBottom="2dp"
-            android:enabled="true" />
+            android:layout_above="@+id/LinearLayout_MainActivity_1"
+            android:layout_alignParentEnd="true" />
     </RelativeLayout>
 </LinearLayout>
