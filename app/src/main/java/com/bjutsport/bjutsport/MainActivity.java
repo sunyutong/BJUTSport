@@ -8,21 +8,45 @@ import android.view.WindowManager;
 import android.widget.Button;
 
 public class MainActivity extends BaseActivity {
+
+
+    /**
+     * 控件声明
+     * */
+
+    //登录按钮
+    Button buttonLogin;
+    //注册按钮
+    Button buttonRegister;
+    //跳过登陆按钮
+    Button buttonSkipLogin;
+
+
+    /**
+     * UI线程
+     * */
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-    /** 控件绑定 */
+
+    /**
+     * 控件绑定
+     * */
 
         //登录按钮
-        Button buttonLogin = (Button) findViewById(R.id.Button_MainActivity_Login);
+        buttonLogin = (Button) findViewById(R.id.Button_MainActivity_Login);
         //注册按钮
-        Button buttonRegister = (Button) findViewById(R.id.Button_MainActivity_Register);
+        buttonRegister = (Button) findViewById(R.id.Button_MainActivity_Register);
         //跳过登陆按钮
-        Button buttonSkipLogin = (Button) findViewById(R.id.Button_MainActivity_Skip_Login);
+        buttonSkipLogin = (Button) findViewById(R.id.Button_MainActivity_Skip_Login);
 
-    /** UI设定 */
+
+    /**
+     * UI设定
+     * */
 
         // 透明状态栏
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
@@ -33,7 +57,10 @@ public class MainActivity extends BaseActivity {
         // 半透明注册按钮
         buttonRegister.getBackground().setAlpha(230);//0~255透明度值
 
-    /** 点击事件 */
+
+    /**
+     * 点击事件
+     * */
 
         //点击登录按钮->进入LoginActivity
         buttonLogin.setOnClickListener(new View.OnClickListener() {
@@ -64,6 +91,7 @@ public class MainActivity extends BaseActivity {
             public void onClick(View v) {
                 Intent intent_register = new Intent(MainActivity.this, UserActivity.class);
                 startActivity(intent_register);
+                ActivityCollector.finishAll();
             }
         });
 
