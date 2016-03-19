@@ -46,7 +46,7 @@ public class RegisterActivity extends Activity {
     //显示密码长度过短
     private static final int SHOW_PASSWORD_TOO_SHORT = 0x0004;
     //跳转到LoginActivity
-    private static final int JUMP_TO_LOGIN_ACTIVITY = 0x0005;
+    private static final int JUMP_TO_USER_ACTIVITY = 0x0005;
 
     //密码长度:8位
     private static final int passwordLength = 8;
@@ -97,10 +97,11 @@ public class RegisterActivity extends Activity {
                         //显示连接超时
                         Toast.makeText(getApplicationContext(), "连接超时,请检查网络连接", Toast.LENGTH_SHORT).show();
                         break;
-                    case JUMP_TO_LOGIN_ACTIVITY:
+                    case JUMP_TO_USER_ACTIVITY:
                         //跳转到用户界面
-                        Intent intent_User = new Intent(RegisterActivity.this, LoginActivity.class);
+                        Intent intent_User = new Intent(RegisterActivity.this, UserActivity.class);
                         startActivity(intent_User);
+                        //结束全部活动
                         finish();
                         break;
                     default:
@@ -110,9 +111,7 @@ public class RegisterActivity extends Activity {
         };
         //从VerificationActivity传过来的Bundle，其中包含了用户名(手机号)信息
         final Bundle bundle = this.getIntent().getExtras();
-
-
-
+        
         /**
          * UI设定
          * */
@@ -203,8 +202,7 @@ public class RegisterActivity extends Activity {
                                     case REGISTER_SUCCESS:
                                         //如果服务器返回值为true,则发送消息以显示注册成功
                                         registerHandler.sendEmptyMessage(SHOW_REGISTER_SUCCESS);
-                                        Thread.sleep(300);
-                                        registerHandler.sendEmptyMessage(JUMP_TO_LOGIN_ACTIVITY);
+                                        registerHandler.sendEmptyMessage(JUMP_TO_USER_ACTIVITY);
                                         break;
                                     case REGISTER_FAILED:
                                         //如果服务器返回值为false,则发送消息以显示注册失败
