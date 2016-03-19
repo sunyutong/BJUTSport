@@ -22,12 +22,9 @@ import com.bjutsport.aes.AESUtil;
 import java.net.SocketTimeoutException;
 
 public class RegisterActivity extends BaseActivity {
-
-
     /**
-     * 常量定义
-     * */
-
+     * 静态常量
+     */
     //AES密钥
     private static final String AES_KEY = "BJUTSport1234567";
     //注册界面URL
@@ -37,7 +34,7 @@ public class RegisterActivity extends BaseActivity {
     //注册界面方法名称:register
     private static final String METHOD_NAME = "register";
 
-    //显示密码前后不一致
+    //显示代码前后不一致
     private static final int SHOW_PASSWORD_INCONSISTENT = 0x0000;
     //显示注册成功
     private static final int SHOW_REGISTER_SUCCESS = 0x0001;
@@ -58,42 +55,22 @@ public class RegisterActivity extends BaseActivity {
     //注册失败
     private static final int REGISTER_FAILED = 0;
 
-
     /**
-     * 控件声明
-     * */
-
-    //后退按钮
-    Button button_back;
-    //注册按钮
-    Button button_register;
-    //密码输入栏
-    private EditText ediUserPassword;
-    //密码输入确认栏
-    private EditText ediUserPasswordCheck;
-    
-    
-    /**
-     * UI线程
-     * */
-
+     * UI线程 (主线程)
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_register);
 
-
         /**
-         * 控件绑定
-         * Handler定义
-         * Bundle定义
+         * 控件绑定、Handler、Bundle定义
          * */
-
         //后退按钮
-        button_back = (Button) findViewById(R.id.Button_RegisterActivity_to_MainActivity);
+        Button button_back = (Button) findViewById(R.id.Button_RegisterActivity_to_MainActivity);
         //注册按钮
-        button_register = (Button) findViewById(R.id.Button_Register_Verification);
+        Button button_register = (Button) findViewById(R.id.Button_Register_Verification);
         //Register的Handler
         final Handler registerHandler = new Handler() {
             @Override
@@ -133,22 +110,18 @@ public class RegisterActivity extends BaseActivity {
         };
         //从VerificationActivity传过来的Bundle，其中包含了用户名(手机号)信息
         final Bundle bundle = this.getIntent().getExtras();
-
-
+        
         /**
          * UI设定
          * */
-
         //设置状态栏为透明
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
 
-
         /**
          * 点击事件
          * */
-
         //点击返回按钮->回到VerificationActivity
         button_back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -156,47 +129,34 @@ public class RegisterActivity extends BaseActivity {
                 finish();
             }
         });
+
         //点击注册按钮，创建新的线程以进行网络访问
         button_register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
                 /**
-                 * 子线程：网络访问
+                 * 子线程
                  * */
-
                 new Thread(new Runnable() {
+                    /**
+                     * 子线程控件绑定
+                     * */
+                    //密码输入栏
+                    EditText ediUserPassword = (EditText) findViewById(R.id.EditText_Register_userPassword);
+                    //密码输入确认栏
+                    EditText ediUserPasswordCheck = (EditText) findViewById(R.id.EditText_Register_userPassword_Check);
+                    /**
+                     * 子线程开始执行
+                     * */
                     @Override
                     public void run() {
-
-
-                        /**
-                         * 子线程控件绑定
-                         * */
-
-                        //密码输入栏
-                        ediUserPassword = (EditText) findViewById(R.id.EditText_Register_userPassword);
-                        //密码输入确认栏
-                        ediUserPasswordCheck = (EditText) findViewById(R.id.EditText_Register_userPassword_Check);
-
-    
-                        /** 
-                         * 提取用户输入的用户名(from Bundle send by VerificationActivity)和密码(from EditText)
-                         * */
-                        
                         //提取用户输入的用户名
-                        String strUserName = bundle.getString("phoneNums");
+                        String strUserName = bundle.getString("phoneNums");//String strUserName = "15911135092";
                         //提取用户输入的密码
                         String strUserPassword = ediUserPassword.getText().toString();
                         //提取用户输入的和二次密码
                         String strUserPasswordCheck = ediUserPasswordCheck.getText().toString();
 
-                        
-                        /** 
-                         * 对用户输入的密码进行错误检测与提醒
-                         * */
-                        
                         if (!checkPasswordLength(strUserPassword)) {
                             //如果用户输入的密码长度小于8,发送消息显示
                             registerHandler.sendEmptyMessage(SHOW_PASSWORD_TOO_SHORT);
@@ -206,27 +166,16 @@ public class RegisterActivity extends BaseActivity {
                         } else {
                             //否则进行注册
                             try {
-
-
-                                /**
-                                 * 对用户名和密码进行AES加密
-                                 * */
-
                                 //加密用户输入的用户名和密码
                                 String encryptedUserName = AESUtil.encrypt(AES_KEY, strUserName);
                                 String encryptedUserPassword = AESUtil.encrypt(AES_KEY, strUserPassword);
 
-
-                                /**
-                                 * 向服务器发送数据
-                                 * */
-
                                 //创建一个SoapObject的对象,并指定WebService的命名空间和调用的方法名
-                                SoapObject request = new SoapObject(WEBSERVICE_NAMESPACE, METHOD_NAME);
+                                SoapObject ruquest = new SoapObject(WEBSERVICE_NAMESPACE, METHOD_NAME);
 
                                 //设置调用方法的参数值,添加加密后的用户名与密码
-                                request.addProperty("encryptedUserName", encryptedUserName);
-                                request.addProperty("encryptedUserPassword", encryptedUserPassword);
+                                ruquest.addProperty("encryptedUserName", encryptedUserName);
+                                ruquest.addProperty("encryptedUserPassword", encryptedUserPassword);
 
                                 //创建HttpTransportSE对象,并通过HttpTransportSE类的构造方法指定Webservice的WSDL文档的URL
                                 HttpTransportSE ht = new HttpTransportSE(WEBSERVICE_WSDL_URL, 1000);
@@ -236,26 +185,17 @@ public class RegisterActivity extends BaseActivity {
                                 SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
 
                                 //设置bodyOut属性为SoapObject对象request
-                                envelope.bodyOut = request;
-                                envelope.setOutputSoapObject(request);
+                                envelope.bodyOut = ruquest;
+                                envelope.setOutputSoapObject(ruquest);
 
                                 //使用call方法调用WebService方法
                                 ht.call(null, envelope);
 
-
-                                /**
-                                 * 从服务器收取数据
-                                 * */
-
                                 //获取返回值
                                 SoapObject returnedValue = (SoapObject) envelope.bodyIn;
+
                                 //解析返回结果
                                 int result = Integer.parseInt(returnedValue.getPropertyAsString(0));
-
-
-                                /**
-                                 * 对返回数据进行处理
-                                 * */
 
                                 switch (result) {
                                     case REGISTER_SUCCESS:
@@ -284,11 +224,7 @@ public class RegisterActivity extends BaseActivity {
         });
     }
 
-
-    /**
-     * 检查密码长度函数
-     * */
-
+    //代码长度检查函数
     private boolean checkPasswordLength(String password) {
         return password.length() >= passwordLength;
     }

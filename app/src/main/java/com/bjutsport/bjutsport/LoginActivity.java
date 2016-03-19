@@ -11,20 +11,20 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
+
 import com.bjutsport.aes.AESUtil;
+
 import java.net.SocketTimeoutException;
 
 public class LoginActivity extends BaseActivity {
-
-
     /**
-     * 常量定义
-     * */
-
+     * 静态常量
+     */
     //AES密钥
     private static final String AES_KEY = "BJUTSport1234567";
     //登录界面URL
@@ -50,42 +50,23 @@ public class LoginActivity extends BaseActivity {
 
 
     /**
-     * 控件声明
-     * */
-
-    //后退按钮
-    Button button_back;
-    //忘记密码按钮
-    Button button_forget_password;
-    //登录按钮
-    Button button_login;
-    //用户名输入栏
-    private EditText ediUserName;
-    //密码输入栏
-    private EditText ediUserPassword;
-
-    /**
      * UI线程 (主线程)
      * */
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_login);
 
-
         /**
-         * 控件绑定
-         * Handler定义
+         * 控件绑定与Handler定义
          * */
-
         //后退按钮
-        button_back = (Button) findViewById(R.id.Button_LoginActivity_Back);
+        Button button_back = (Button) findViewById(R.id.Button_LoginActivity_Back);
         //忘记密码按钮
-        button_forget_password = (Button) findViewById(R.id.Button_LoginActivity_Forget_Password);
+        Button button_forget_password = (Button) findViewById(R.id.Button_LoginActivity_Forget_Password);
         //登录按钮
-        button_login = (Button) findViewById(R.id.Button_LoginActivity_Login);
+        Button button_login = (Button) findViewById(R.id.Button_LoginActivity_Login);
         //Login的Handler
         final Handler loginHandler = new Handler() {
             @Override
@@ -115,21 +96,17 @@ public class LoginActivity extends BaseActivity {
             }
         };
 
-
         /**
          * UI设定
          * */
-
         //设置状态栏为透明
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
 
-
         /**
          * 点击事件
          * */
-
         //点击返回按钮->回到MainActivity
         button_back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -137,6 +114,7 @@ public class LoginActivity extends BaseActivity {
                 finish();
             }
         });
+
         //点击忘记密码按钮->进入VerificationActivity（forgetPassword版）
         button_forget_password.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -150,59 +128,42 @@ public class LoginActivity extends BaseActivity {
                 startActivity(intent_verification);
             }
         });
+
         //点击登录按钮，创建新的线程以进行网络访问
         button_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
                 /**
-                 * 子线程:网络访问
+                 * 子线程
                  * */
-
                 new Thread(new Runnable() {
+                    /**
+                     * 子线程控件绑定
+                     * */
+                    //用户名输入栏
+                    EditText ediUserName = (EditText) findViewById(R.id.EditText_LoginActivity_UserName);
+                    //密码输入栏
+                    EditText ediUserPassword = (EditText) findViewById(R.id.EditText_LoginActivity_UserPassword);
+                    /**
+                     * 子线程开始执行
+                     * */
                     @Override
                     public void run() {
-                        
-                        
-                        /**
-                         * 子线程控件绑定
-                         * */
-
-                        //用户名输入栏
-                        ediUserName = (EditText) findViewById(R.id.EditText_LoginActivity_UserName);
-                        //密码输入栏
-                        ediUserPassword = (EditText) findViewById(R.id.EditText_LoginActivity_UserPassword);
-                        
-                        
-                        /**
-                         * 提取用户输入的用户名和密码
-                         * */
-                        
+                        //提取用户输入的用户名和密码
                         String strUserName = ediUserName.getText().toString();
                         String strUserPassword = ediUserPassword.getText().toString();
-
-                        
-                        /** 
-                         * 对用户输入的用户名和密码进行AES加密
-                         * */
 
                         try {
                             //加密用户输入的用户名和密码
                             String encryptedUserName = AESUtil.encrypt(AES_KEY, strUserName);
                             String encryptedUserPassword = AESUtil.encrypt(AES_KEY, strUserPassword);
 
-                            
-                            /** 
-                             * 向服务器发出数据
-                             * */
-                        
                             //创建一个SoapObject的对象,并指定WebService的命名空间和调用的方法名
-                            SoapObject request = new SoapObject(WEBSERVICE_NAMESPACE, METHOD_NAME);
+                            SoapObject ruquest = new SoapObject(WEBSERVICE_NAMESPACE, METHOD_NAME);
 
                             //设置调用方法的参数值,添加加密后的用户名与密码
-                            request.addProperty("encryptedUserName", encryptedUserName);
-                            request.addProperty("encryptedUserPassword", encryptedUserPassword);
+                            ruquest.addProperty("encryptedUserName", encryptedUserName);
+                            ruquest.addProperty("encryptedUserPassword", encryptedUserPassword);
 
                             //创建HttpTransportSE对象,并通过HttpTransportSE类的构造方法指定Webservice的WSDL文档的URL
                             HttpTransportSE ht = new HttpTransportSE(WEBSERVICE_WSDL_URL, 1000);
@@ -212,27 +173,17 @@ public class LoginActivity extends BaseActivity {
                             SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
 
                             //设置bodyOut属性为SoapObject对象request
-                            envelope.bodyOut = request;
-                            envelope.setOutputSoapObject(request);
+                            envelope.bodyOut = ruquest;
+                            envelope.setOutputSoapObject(ruquest);
 
                             //使用call方法调用WebService方法
                             ht.call(null, envelope);
-
-
-                            /**
-                             * 从服务器收取数据
-                             * */
 
                             //获取返回值
                             SoapObject returnedValue = (SoapObject) envelope.bodyIn;
 
                             //解析返回结果
                             int result = Integer.parseInt(returnedValue.getPropertyAsString(0));
-
-
-                            /**
-                             * 对返回数据进行处理
-                             * */
 
                             switch (result) {
                                 case LOGIN_SUCCESS:
