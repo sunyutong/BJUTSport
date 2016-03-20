@@ -1,5 +1,6 @@
 package com.bjutsport.bjutsport;
 
+
 import android.content.Intent;
 import android.os.Build;
 import android.os.Handler;
@@ -21,7 +22,7 @@ import java.net.SocketTimeoutException;
 
 public class ChangePasswordActivity extends BaseActivity {
 
-    
+
     /** 
      * 常量定义
      * */

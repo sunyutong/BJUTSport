@@ -2,6 +2,7 @@ package com.bjutsport.bjutsport;
 
 import cn.smssdk.EventHandler;
 import cn.smssdk.SMSSDK;
+
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -21,11 +22,14 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.FrameLayout.LayoutParams;
+
 import com.bjutsport.aes.AESUtil;
+
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
+
 import java.net.SocketTimeoutException;
 
 public class VerificationActivity extends BaseActivity implements OnClickListener {
@@ -37,9 +41,9 @@ public class VerificationActivity extends BaseActivity implements OnClickListene
 
     //AES密钥
     private static final String AES_KEY = "BJUTSport1234567";
-    //注册界面URL?
+    //注册界面URL
     private static final String WEBSERVICE_WSDL_URL = "http://192.168.1.101:8080/BJUTSport/services/RegisterImplPort?wsdl";
-    //注册界面NameSpace?
+    //注册界面NameSpace
     private static final String WEBSERVICE_NAMESPACE = "http://register.bjutsport.com/";
     //验证验证码界面方法名称:validateUsername
     private static final String METHOD_NAME = "validateUsername";
@@ -50,20 +54,23 @@ public class VerificationActivity extends BaseActivity implements OnClickListene
     private static final int SHOW_PHONE_NUMBER_DO_NOT_EXIST = 0x0001;
     //显示连接超时
     private static final int SHOW_SOCKET_TIMEOUT = 0x0002;
+    //显示验证码非法
+    private static final int SHOW_CODE_ILLEGAL = 0x0003;
+    //显示手机号码有误
+    private static final int SHOW_PHONE_NUMBER_ILLEGAL = 0x0004;
 
     //验证成功
     private static final int VALIDATE_SUCCESS = 1;
     //验证失败
     private static final int VALIDATE_FAILED = 0;
 
-    //时间限制?
+    //时间限制
     private static final int TIME_LIMIT = 30;
-    //剩余时间?
+    //剩余时间
     private static int leftTime = TIME_LIMIT;
 
-    //字符串state?
+    //字符串state
     private static String state;
-
 
 
     // 手机号输入框
@@ -87,12 +94,13 @@ public class VerificationActivity extends BaseActivity implements OnClickListene
         /**
          * 控件绑定、Handler、Bundle定义
          * */
+
         //返回按钮
         Button button_back = (Button) findViewById(R.id.Button_VerificationActivity_to_MainActivity);
         //菜单栏标题
-        TextView textView_VerificationTitle = (TextView)findViewById(R.id.TextView_Verification_Title);
+        TextView textView_VerificationTitle = (TextView) findViewById(R.id.TextView_Verification_Title);
         //注册/提交 按钮 (依据state而定)
-        Button button_Verification = (Button)findViewById(R.id.Button_Verification_Verification);
+        Button button_Verification = (Button) findViewById(R.id.Button_Verification_Verification);
         //从MainActivity或LoginActivity传过来的Bundle，其中包含的state字符串决定了activity_verification的UI
         Bundle thisBundle = this.getIntent().getExtras();
         //获取Bundle中的state字符串
@@ -101,15 +109,17 @@ public class VerificationActivity extends BaseActivity implements OnClickListene
         /**
          * UI设定
          * */
+
         //设置状态栏为透明
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
+
         //根据state传进来的信息修改UI设计
         if (state.equals("register")) {
             textView_VerificationTitle.setText("注册");
             button_Verification.setText("注册");
-        } else if(state.equals("forgetPassword")) {
+        } else if (state.equals("forgetPassword")) {
             textView_VerificationTitle.setText("验证验证码");
             button_Verification.setText("提交");
         }
@@ -117,6 +127,7 @@ public class VerificationActivity extends BaseActivity implements OnClickListene
         /**
          * 点击事件
          * */
+
         //点击返回按钮->回到上一级菜单（MainActivity或LoginActivity）
         button_back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -124,7 +135,6 @@ public class VerificationActivity extends BaseActivity implements OnClickListene
                 finish();
             }
         });
-
 
         //启动短信验证功能
         init();
@@ -156,6 +166,7 @@ public class VerificationActivity extends BaseActivity implements OnClickListene
                 handler.sendMessage(msg);
             }
         };
+
         //注册回调监听接口
         SMSSDK.registerEventHandler(eventHandler);
     }
@@ -169,122 +180,78 @@ public class VerificationActivity extends BaseActivity implements OnClickListene
                     @Override
                     public void run() {
                         String phoneNums = inputPhoneEt.getText().toString();
-                        try {
-                            //加密用户输入的用户名
-                            String encryptedUserName = AESUtil.encrypt(AES_KEY, phoneNums);
+                        if (judgePhoneNums(phoneNums)) {
+                            try {
+                                //加密用户输入的用户名
+                                String encryptedUserName = AESUtil.encrypt(AES_KEY, phoneNums);
 
-                            //创建一个SoapObject的对象,并指定WebService的命名空间和调用的方法名
-                            SoapObject ruquest = new SoapObject(WEBSERVICE_NAMESPACE, METHOD_NAME);
+                                //创建一个SoapObject的对象,并指定WebService的命名空间和调用的方法名
+                                SoapObject ruquest = new SoapObject(WEBSERVICE_NAMESPACE, METHOD_NAME);
 
-                            //设置调用方法的参数值,添加加密后的用户名与密码
-                            ruquest.addProperty("encryptedUserName", encryptedUserName);
+                                //设置调用方法的参数值,添加加密后的用户名与密码
+                                ruquest.addProperty("encryptedUserName", encryptedUserName);
 
-                            //创建HttpTransportSE对象,并通过HttpTransportSE类的构造方法指定Webservice的WSDL文档的URL
-                            HttpTransportSE ht = new HttpTransportSE(WEBSERVICE_WSDL_URL, 1000);
+                                //创建HttpTransportSE对象,并通过HttpTransportSE类的构造方法指定Webservice的WSDL文档的URL
+                                HttpTransportSE ht = new HttpTransportSE(WEBSERVICE_WSDL_URL, 1000);
 
-                            //生成调用WebService方法的SOAP请求消息,该信息由SoapSerializationEnvelope描述
-                            //SOAP版本号为1.1
-                            SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+                                //生成调用WebService方法的SOAP请求消息,该信息由SoapSerializationEnvelope描述
+                                //SOAP版本号为1.1
+                                SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
 
-                            //设置bodyOut属性为SoapObject对象request
-                            envelope.bodyOut = ruquest;
-                            envelope.setOutputSoapObject(ruquest);
+                                //设置bodyOut属性为SoapObject对象request
+                                envelope.bodyOut = ruquest;
+                                envelope.setOutputSoapObject(ruquest);
 
-                            //使用call方法调用WebService方法
-                            ht.call(null, envelope);
+                                //使用call方法调用WebService方法
+                                ht.call(null, envelope);
 
-                            //获取返回值
-                            SoapObject returnedValue = (SoapObject) envelope.bodyIn;
+                                //获取返回值
+                                SoapObject returnedValue = (SoapObject) envelope.bodyIn;
 
-                            //解析返回结果
-                            int result = Integer.parseInt(returnedValue.getPropertyAsString(0));
+                                //解析返回结果
+                                int result = Integer.parseInt(returnedValue.getPropertyAsString(0));
 
-                            switch (result) {
-                                case VALIDATE_SUCCESS:
-                                    if (state.equals("register")) {
-                                        if (!judgePhoneNums(phoneNums)) {
-                                            return;
+                                switch (result) {
+                                    case VALIDATE_SUCCESS:
+                                        if (state.equals("register")) {
+                                            //发送验证码请求
+                                            sendCodeRequest(phoneNums);
+                                        } else if (state.equals("forgetPassword")) {
+                                            //显示用户名不存在
+                                            verificationHandler.sendEmptyMessage(SHOW_PHONE_NUMBER_DO_NOT_EXIST);
                                         }
-                                        // 2. 通过sdk发送短信验证
-                                        SMSSDK.getVerificationCode("86", phoneNums);
-
-                                        // 3. 把按钮变成不可点击，并且显示倒计时（正在获取）
-                                        requestCodeBtn.setClickable(false);
-                                        handler.sendEmptyMessage(-9);
-                                        new Thread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                for (leftTime = TIME_LIMIT; leftTime > 0; leftTime--) {
-                                                    handler.sendEmptyMessage(-9);
-                                                    if (leftTime <= 0) {
-                                                        break;
-                                                    }
-                                                    try {
-                                                        Thread.sleep(1000);
-                                                    } catch (InterruptedException e) {
-                                                        e.printStackTrace();
-                                                    }
-                                                }
-                                                handler.sendEmptyMessage(-8);
-                                            }
-                                        }).start();
-                                    } else if (state.equals("forgetPassword")) {
-                                        if (!judgePhoneNums(phoneNums)) {
-                                            return;
+                                        break;
+                                    case VALIDATE_FAILED:
+                                        if (state.equals("register")) {
+                                            //显示用户名已存在
+                                            verificationHandler.sendEmptyMessage(SHOW_PHONE_NUMBER_ALREADY_EXIST);
+                                        } else if (state.equals("forgetPassword")) {
+                                            //发送验证码请求
+                                            sendCodeRequest(phoneNums);
                                         }
-                                        //显示用户名不存在
-                                        verificationHandler.sendEmptyMessage(SHOW_PHONE_NUMBER_DO_NOT_EXIST);
-                                    }
-                                    break;
-                                case VALIDATE_FAILED:
-                                    if (state.equals("register")) {
-                                        //显示用户名已存在
-                                        verificationHandler.sendEmptyMessage(SHOW_PHONE_NUMBER_ALREADY_EXIST);
-                                    } else if (state.equals("forgetPassword")) {
-                                        if (!judgePhoneNums(phoneNums)) {
-                                            return;
-                                        }
-                                        // 2. 通过sdk发送短信验证
-                                        SMSSDK.getVerificationCode("86", phoneNums);
-
-                                        // 3. 把按钮变成不可点击，并且显示倒计时（正在获取）
-                                        requestCodeBtn.setClickable(false);
-                                        handler.sendEmptyMessage(-9);
-                                        new Thread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                for (leftTime = TIME_LIMIT; leftTime > 0; leftTime--) {
-                                                    handler.sendEmptyMessage(-9);
-                                                    if (leftTime <= 0) {
-                                                        break;
-                                                    }
-                                                    try {
-                                                        Thread.sleep(1000);
-                                                    } catch (InterruptedException e) {
-                                                        e.printStackTrace();
-                                                    }
-                                                }
-                                                handler.sendEmptyMessage(-8);
-                                            }
-                                        }).start();
-                                    }
-                                    break;
+                                        break;
+                                }
+                            } catch (SocketTimeoutException ste) {
+                                //抛出异常以显示连接超时
+                                verificationHandler.sendEmptyMessage(SHOW_SOCKET_TIMEOUT);
+                                ste.printStackTrace();
+                            } catch (Exception e) {
+                                e.printStackTrace();
                             }
-                        } catch (SocketTimeoutException ste) {
-                            //抛出异常以显示连接超时
-                            verificationHandler.sendEmptyMessage(SHOW_SOCKET_TIMEOUT);
-                            ste.printStackTrace();
-                        } catch (Exception e) {
-                            e.printStackTrace();
                         }
                     }
                 }).start();
                 break;
 
             case R.id.Button_Verification_Verification:
-                SMSSDK.submitVerificationCode("86", phoneNums, inputCodeEt.getText().toString());
-                createProgressBar();
-
+                if (judgePhoneNums(phoneNums)) {
+                    if (inputCodeEt.getText().toString().equals("")) {
+                        verificationHandler.sendEmptyMessage(SHOW_CODE_ILLEGAL);
+                    } else {
+                        SMSSDK.submitVerificationCode("86", phoneNums, inputCodeEt.getText().toString());
+                        createProgressBar();
+                    }
+                }
                 break;
 
         }
@@ -306,6 +273,14 @@ public class VerificationActivity extends BaseActivity implements OnClickListene
                     //显示该手机号未注册
                     Toast.makeText(getApplicationContext(), "该手机号未注册", Toast.LENGTH_SHORT).show();
                     break;
+                case SHOW_CODE_ILLEGAL:
+                    //显示验证码非法
+                    Toast.makeText(getApplicationContext(), "验证码格式错误", Toast.LENGTH_SHORT).show();
+                    break;
+                case SHOW_PHONE_NUMBER_ILLEGAL:
+                    //显示手机号码有误
+                    Toast.makeText(getApplicationContext(), "手机号码输入有误", Toast.LENGTH_SHORT).show();
+                    break;
             }
         }
     };
@@ -323,7 +298,6 @@ public class VerificationActivity extends BaseActivity implements OnClickListene
                 Object data = msg.obj;
                 Log.e("event", "event=" + event);
                 if (result == SMSSDK.RESULT_COMPLETE) {
-                    // 短信注册成功后，返回MainActivity,然后提示
                     if (event == SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE) {
                         // 提交验证码成功
                         Toast.makeText(getApplicationContext(), "提交验证码成功", Toast.LENGTH_SHORT).show();
@@ -349,6 +323,33 @@ public class VerificationActivity extends BaseActivity implements OnClickListene
         }
     };
 
+    //发送获取验证码请求
+    private void sendCodeRequest(String phoneNums) {
+
+        // 2. 通过sdk发送短信验证
+        SMSSDK.getVerificationCode("86", phoneNums);
+
+        // 3. 把按钮变成不可点击，并且显示倒计时（正在获取）
+        requestCodeBtn.setClickable(false);
+        handler.sendEmptyMessage(-9);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                for (leftTime = TIME_LIMIT; leftTime > 0; leftTime--) {
+                    handler.sendEmptyMessage(-9);
+                    if (leftTime <= 0) {
+                        break;
+                    }
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                handler.sendEmptyMessage(-8);
+            }
+        }).start();
+    }
 
     /**
      * 判断手机号码是否合理
@@ -360,7 +361,7 @@ public class VerificationActivity extends BaseActivity implements OnClickListene
                 && isMobileNO(phoneNums)) {
             return true;
         }
-        Toast.makeText(this, "手机号码输入有误！", Toast.LENGTH_SHORT).show();
+        verificationHandler.sendEmptyMessage(SHOW_PHONE_NUMBER_ILLEGAL);
         return false;
     }
 
