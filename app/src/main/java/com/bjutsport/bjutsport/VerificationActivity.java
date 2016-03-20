@@ -75,8 +75,6 @@ public class VerificationActivity extends Activity implements OnClickListener {
         button_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent_Main = new Intent(VerificationActivity.this, MainActivity.class);
-                startActivity(intent_Main);
                 finish();
             }
         });
