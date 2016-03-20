@@ -244,11 +244,13 @@ public class VerificationActivity extends BaseActivity implements OnClickListene
                 break;
 
             case R.id.Button_Verification_Verification:
-                if (inputCodeEt.getText().toString().equals("")) {
-                    verificationHandler.sendEmptyMessage(SHOW_CODE_ILLEGAL);
-                } else {
-                    SMSSDK.submitVerificationCode("86", phoneNums, inputCodeEt.getText().toString());
-                    createProgressBar();
+                if (judgePhoneNums(phoneNums)) {
+                    if (inputCodeEt.getText().toString().equals("")) {
+                        verificationHandler.sendEmptyMessage(SHOW_CODE_ILLEGAL);
+                    } else {
+                        SMSSDK.submitVerificationCode("86", phoneNums, inputCodeEt.getText().toString());
+                        createProgressBar();
+                    }
                 }
                 break;
 
