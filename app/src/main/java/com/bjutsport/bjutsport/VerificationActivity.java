@@ -2,8 +2,6 @@ package com.bjutsport.bjutsport;
 
 import cn.smssdk.EventHandler;
 import cn.smssdk.SMSSDK;
-
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -20,36 +18,57 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.FrameLayout.LayoutParams;
-
 import com.bjutsport.aes.AESUtil;
-
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
-
 import java.net.SocketTimeoutException;
 
-public class VerificationActivity extends Activity implements OnClickListener {
+public class VerificationActivity extends BaseActivity implements OnClickListener {
 
+
+    /**
+     * 静态常量
+     */
+
+    //AES密钥
     private static final String AES_KEY = "BJUTSport1234567";
+<<<<<<< HEAD
     private static final String WEBSERVICE_WSDL_URL = "http://192.168.1.101:8080/BJUTSport/services/RegisterImplPort?wsdl";
+=======
+    //注册界面URL?
+    private static final String WEBSERVICE_WSDL_URL = "http://192.168.1.101:8080/BJUTSport/services/RegisterImplPort?wsdl";
+    //注册界面NameSpace?
+>>>>>>> refs/remotes/origin/Lichee's-branch
     private static final String WEBSERVICE_NAMESPACE = "http://register.bjutsport.com/";
+    //验证验证码界面方法名称:validateUsername
     private static final String METHOD_NAME = "validateUsername";
 
+    //显示手机号已经注册
     private static final int SHOW_PHONE_NUMBER_ALREADY_EXIST = 0x0000;
+    //显示手机号不存在
     private static final int SHOW_PHONE_NUMBER_DO_NOT_EXIST = 0x0001;
-    private static final int SHOW_SOCKETTIMOUT = 0x0002;
+    //显示连接超时
+    private static final int SHOW_SOCKET_TIMEOUT = 0x0002;
 
+    //验证成功
     private static final int VALIDATE_SUCCESS = 1;
+    //验证失败
     private static final int VALIDATE_FAILED = 0;
 
+    //时间限制?
     private static final int TIME_LIMIT = 30;
+    //剩余时间?
     private static int leftTime = TIME_LIMIT;
 
+    //字符串state?
     private static String state;
+
+
 
     // 手机号输入框
     private EditText inputPhoneEt;
@@ -60,18 +79,49 @@ public class VerificationActivity extends Activity implements OnClickListener {
     // 注册按钮
     private Button commitBtn;
 
+    /**
+     * UI线程 (主线程)
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_verification);
 
+        /**
+         * 控件绑定、Handler、Bundle定义
+         * */
+        //返回按钮
+        Button button_back = (Button) findViewById(R.id.Button_VerificationActivity_to_MainActivity);
+        //菜单栏标题
+        TextView textView_VerificationTitle = (TextView)findViewById(R.id.TextView_Verification_Title);
+        //注册/提交 按钮 (依据state而定)
+        Button button_Verification = (Button)findViewById(R.id.Button_Verification_Verification);
+        //从MainActivity或LoginActivity传过来的Bundle，其中包含的state字符串决定了activity_verification的UI
+        Bundle thisBundle = this.getIntent().getExtras();
+        //获取Bundle中的state字符串
+        state = thisBundle.getString("state");
+
+        /**
+         * UI设定
+         * */
         //设置状态栏为透明
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
+        //根据state传进来的信息修改UI设计
+        if (state.equals("register")) {
+            textView_VerificationTitle.setText("注册");
+            button_Verification.setText("注册");
+        } else if(state.equals("forgetPassword")) {
+            textView_VerificationTitle.setText("验证验证码");
+            button_Verification.setText("提交");
+        }
 
-        Button button_back = (Button) findViewById(R.id.Button_VerificationActivity_to_MainActivity);
+        /**
+         * 点击事件
+         * */
+        //点击返回按钮->回到上一级菜单（MainActivity或LoginActivity）
         button_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -79,8 +129,7 @@ public class VerificationActivity extends Activity implements OnClickListener {
             }
         });
 
-        Bundle thisBundle = this.getIntent().getExtras();
-        state = thisBundle.getString("state");
+
         //启动短信验证功能
         init();
     }
@@ -188,13 +237,13 @@ public class VerificationActivity extends Activity implements OnClickListener {
                                             return;
                                         }
                                         //显示用户名不存在
-                                        verficationHandler.sendEmptyMessage(SHOW_PHONE_NUMBER_DO_NOT_EXIST);
+                                        verificationHandler.sendEmptyMessage(SHOW_PHONE_NUMBER_DO_NOT_EXIST);
                                     }
                                     break;
                                 case VALIDATE_FAILED:
                                     if (state.equals("register")) {
                                         //显示用户名已存在
-                                        verficationHandler.sendEmptyMessage(SHOW_PHONE_NUMBER_ALREADY_EXIST);
+                                        verificationHandler.sendEmptyMessage(SHOW_PHONE_NUMBER_ALREADY_EXIST);
                                     } else if (state.equals("forgetPassword")) {
                                         if (!judgePhoneNums(phoneNums)) {
                                             return;
@@ -227,7 +276,7 @@ public class VerificationActivity extends Activity implements OnClickListener {
                             }
                         } catch (SocketTimeoutException ste) {
                             //抛出异常以显示连接超时
-                            verficationHandler.sendEmptyMessage(SHOW_SOCKETTIMOUT);
+                            verificationHandler.sendEmptyMessage(SHOW_SOCKET_TIMEOUT);
                             ste.printStackTrace();
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -239,18 +288,17 @@ public class VerificationActivity extends Activity implements OnClickListener {
             case R.id.Button_Verification_Verification:
                 SMSSDK.submitVerificationCode("86", phoneNums, inputCodeEt.getText().toString());
                 createProgressBar();
+
                 break;
 
         }
     }
 
-    /**
-     *
-     */
-    Handler verficationHandler = new Handler() {
+
+    Handler verificationHandler = new Handler() {
         public void handleMessage(Message msg) {
             switch (msg.what) {
-                case SHOW_SOCKETTIMOUT:
+                case SHOW_SOCKET_TIMEOUT:
                     //显示连接超时
                     Toast.makeText(getApplicationContext(), "连接超时,请检查网络连接", Toast.LENGTH_SHORT).show();
                     break;
@@ -295,7 +343,6 @@ public class VerificationActivity extends Activity implements OnClickListener {
                         nextBundle.putString("phoneNums", phoneNums);
                         intent.putExtras(nextBundle);
                         startActivity(intent);
-                        finish();
                     } else if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE) {
                         Toast.makeText(getApplicationContext(), "验证码已经发送", Toast.LENGTH_SHORT).show();
                     } else {
@@ -341,7 +388,7 @@ public class VerificationActivity extends Activity implements OnClickListener {
      */
     public static boolean isMobileNO(String mobileNums) {
         /*
-		 * 移动：134、135、136、137、138、139、150、151、157(TD)、158、159、187、188
+         * 移动：134、135、136、137、138、139、150、151、157(TD)、158、159、187、188
 		 * 联通：130、131、132、152、155、156、185、186 电信：133、153、180、189、（1349卫通）
 		 * 总结起来就是第一位必定为1，第二位必定为3或5或8，其他位置的可以为0-9
 		 */
