@@ -30,13 +30,9 @@ public class RegisterActivity extends BaseActivity {
 
     //AES密钥
     private static final String AES_KEY = "BJUTSport1234567";
-<<<<<<< HEAD
-    private static final String WEBSERVICE_WSDL_URL = "http://192.168.1.101:8080/BJUTSport/services/RegisterImplPort?wsdl";
-=======
     //注册界面URL
     private static final String WEBSERVICE_WSDL_URL = "http://192.168.1.101:8080/BJUTSport/services/RegisterImplPort?wsdl";
     //注册界面NameSpace
->>>>>>> refs/remotes/origin/Lichee's-branch
     private static final String WEBSERVICE_NAMESPACE = "http://register.bjutsport.com/";
     //注册界面方法名称:register
     private static final String METHOD_NAME = "register";

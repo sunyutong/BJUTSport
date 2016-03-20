@@ -27,13 +27,9 @@ public class LoginActivity extends BaseActivity {
 
     //AES密钥
     private static final String AES_KEY = "BJUTSport1234567";
-<<<<<<< HEAD
-    private static final String WEBSERVICE_WSDL_URL = "http://192.168.1.101:8080/BJUTSport/services/LoginImplPort?wsdl";
-=======
     //登录界面URL
     private static final String WEBSERVICE_WSDL_URL = "http://192.168.1.101:8080/BJUTSport/services/LoginImplPort?wsdl";
     //登录界面域名
->>>>>>> refs/remotes/origin/Lichee's-branch
     private static final String WEBSERVICE_NAMESPACE = "http://login.bjutsport.com/";
     //登录界面方法名称:login
     private static final String METHOD_NAME = "login";

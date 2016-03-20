@@ -1,13 +1,6 @@
 package com.bjutsport.bjutsport;
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-import android.app.Activity;
-=======
 
->>>>>>> refs/remotes/origin/Lichee's-branch
-=======
->>>>>>> refs/remotes/origin/Lichee's-branch
 import android.content.Intent;
 import android.os.Build;
 import android.os.Handler;
@@ -27,13 +20,9 @@ import org.ksoap2.transport.HttpTransportSE;
 
 import java.net.SocketTimeoutException;
 
-<<<<<<< HEAD
-public class ChangePasswordActivity extends Activity {
-=======
 public class ChangePasswordActivity extends BaseActivity {
->>>>>>> refs/remotes/origin/Lichee's-branch
 
-    
+
     /** 
      * 常量定义
      * */
