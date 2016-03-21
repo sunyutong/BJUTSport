@@ -13,7 +13,19 @@ public class basketballPlayer implements KvmSerializable {
     //年龄
     private Integer age;
     //性别
-    private Boolean sex;
+    private String sex;
+    //身高
+    private Integer tall;
+    //体重
+    private Integer weight;
+    //位置
+    private String position;
+    //队伍
+    private String team;
+    //号码
+    private Integer number;
+    //球员特征
+    private String characteristic;
 
     @Override
     public Object getProperty(int arg0) {
@@ -24,6 +36,18 @@ public class basketballPlayer implements KvmSerializable {
                 return age;
             case 2:
                 return sex;
+            case 3:
+                return tall;
+            case 4:
+                return weight;
+            case 5:
+                return position;
+            case 6:
+                return team;
+            case 7:
+                return number;
+            case 8:
+                return characteristic;
             default:
                 break;
         }
@@ -32,7 +56,7 @@ public class basketballPlayer implements KvmSerializable {
 
     @Override
     public int getPropertyCount() {
-        return 3;
+        return 8;
     }
 
     @Override
@@ -45,7 +69,26 @@ public class basketballPlayer implements KvmSerializable {
                 age = Integer.parseInt(arg1.toString());
                 break;
             case 2:
-                sex = Boolean.parseBoolean(arg1.toString());
+                sex = arg1.toString();
+                break;
+            case 3:
+                tall = Integer.parseInt(arg1.toString());
+                break;
+            case 4:
+                weight = Integer.parseInt(arg1.toString());
+                break;
+            case 5:
+                position = arg1.toString();
+                break;
+            case 6:
+                team = arg1.toString();
+                break;
+            case 7:
+                number = Integer.parseInt(arg1.toString());
+                break;
+            case 8:
+                characteristic = arg1.toString();
+                break;
             default:
                 break;
         }
@@ -63,35 +106,98 @@ public class basketballPlayer implements KvmSerializable {
                 arg2.name = "age";
                 break;
             case 2:
-                arg2.type = PropertyInfo.BOOLEAN_CLASS;
+                arg2.type = PropertyInfo.STRING_CLASS;
                 arg2.name = "sex";
+                break;
+            case 3:
+                arg2.type = PropertyInfo.INTEGER_CLASS;
+                arg2.name = "tall";
+                break;
+            case 4:
+                arg2.type = PropertyInfo.INTEGER_CLASS;
+                arg2.name = "weight";
+                break;
+            case 5:
+                arg2.type = PropertyInfo.STRING_CLASS;
+                arg2.name = "position";
+                break;
+            case 6:
+                arg2.type = PropertyInfo.STRING_CLASS;
+                arg2.name = "team";
+                break;
+            case 7:
+                arg2.type = PropertyInfo.INTEGER_CLASS;
+                arg2.name = "number";
+                break;
+            case 8:
+                arg2.type = PropertyInfo.STRING_CLASS;
+                arg2.name = "characteristic";
                 break;
             default:
                 break;
         }
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setAge(Integer age) {
-        this.age = age;
-    }
-
-    public void setSex(Boolean sex) {
-        this.sex = sex;
-    }
-
     public String getName() {
         return name;
     }
-
+    public void setName(String name) {
+        this.name = name;
+    }
+    public String getSex() {
+        return sex;
+    }
+    public void setSex(String sex) {
+        this.sex = sex;
+    }
     public Integer getAge() {
         return age;
     }
-
-    public Boolean getSex() {
-        return sex;
+    public void setAge(Integer age) {
+        this.age = age;
     }
+    public Integer getTall() {
+        return tall;
+    }
+    public void setTall(Integer tall) {
+        this.tall = tall;
+    }
+    public Integer getWeight() {
+        return weight;
+    }
+    public void setWeight(Integer weight) {
+        this.weight = weight;
+    }
+    public String getPosition() {
+        return position;
+    }
+    public void setPosition(String position) {
+        this.position = position;
+    }
+    public String getTeam() {
+        return team;
+    }
+    public void setTeam(String team) {
+        this.team = team;
+    }
+    public Integer getNumber() {
+        return number;
+    }
+    public void setNumber(Integer number) {
+        this.number = number;
+    }
+    public String getCharacteristic() {
+        return characteristic;
+    }
+    public void setCharacteristic(String characteristic) {
+        this.characteristic = characteristic;
+    }
+
+    @Override
+    public String toString() {
+        return "basketballPlayer [name=" + name + ", sex=" + sex + ", age=" + age + ", tall=" + tall
+                + ", weight=" + weight + ", position=" + position + ", team=" + team + ", number=" + number
+                + ", characteristic=" + characteristic + "]";
+    }
+
 }
