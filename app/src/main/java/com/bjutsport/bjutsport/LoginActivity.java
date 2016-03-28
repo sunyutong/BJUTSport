@@ -25,15 +25,6 @@ public class LoginActivity extends BaseActivity {
      * 常量定义
      * */
 
-    //AES密钥
-    private static final String AES_KEY = "BJUTSport1234567";
-    //登录界面URL
-    private static final String WEBSERVICE_WSDL_URL = "http://192.168.1.101:8080/BJUTSport/services/LoginImplPort?wsdl";
-    //登录界面域名
-    private static final String WEBSERVICE_NAMESPACE = "http://login.bjutsport.com/";
-    //登录界面方法名称:login
-    private static final String METHOD_NAME = "login";
-
     //在TextView中显示登录成功
     private static final int SHOW_LOGIN_SUCCESS_IN_TEXTVIEW = 0x0000;
     //在TextView中显示登录失败
@@ -64,6 +55,7 @@ public class LoginActivity extends BaseActivity {
     //密码输入栏
     private EditText ediUserPassword;
 
+
     /**
      * UI线程 (主线程)
      * */
@@ -87,34 +79,6 @@ public class LoginActivity extends BaseActivity {
         //登录按钮
         button_login = (Button) findViewById(R.id.Button_LoginActivity_Login);
         //Login的Handler
-        final Handler loginHandler = new Handler() {
-            @Override
-            public void handleMessage(Message msg) {
-                switch (msg.what) {
-                    case SHOW_LOGIN_SUCCESS_IN_TEXTVIEW:
-                        //显示登录成功
-                        Toast.makeText(getApplicationContext(), "登陆成功", Toast.LENGTH_SHORT).show();
-                        break;
-                    case SHOW_LOGIN_FAILED_IN_TEXTVIEW:
-                        //显示登录失败
-                        Toast.makeText(getApplicationContext(), "登录失败,用户名或密码错误", Toast.LENGTH_SHORT).show();
-                        break;
-                    case SHOW_SOCKET_TIMEOUT:
-                        //显示连接超时
-                        Toast.makeText(getApplicationContext(), "连接超时,请检查网络连接", Toast.LENGTH_SHORT).show();
-                        break;
-                    case JUMP_TO_USER_ACTIVITY:
-                        Intent intent_User = new Intent(LoginActivity.this, UserActivity.class);
-                        startActivity(intent_User);
-                        //结束全部活动除了用户界面
-                        ActivityCollector.finishAll();
-                        break;
-                    default:
-                        break;
-                }
-            }
-        };
-
 
         /**
          * UI设定
@@ -155,7 +119,6 @@ public class LoginActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
 
-
                 /**
                  * 子线程:网络访问
                  * */
@@ -189,8 +152,8 @@ public class LoginActivity extends BaseActivity {
 
                         try {
                             //加密用户输入的用户名和密码
-                            String encryptedUserName = AESUtil.encrypt(AES_KEY, strUserName);
-                            String encryptedUserPassword = AESUtil.encrypt(AES_KEY, strUserPassword);
+                            String encryptedUserName = AESUtil.encrypt(WebService.AES_KEY, strUserName);
+                            String encryptedUserPassword = AESUtil.encrypt(WebService.AES_KEY, strUserPassword);
 
                             
                             /** 
@@ -198,14 +161,14 @@ public class LoginActivity extends BaseActivity {
                              * */
                         
                             //创建一个SoapObject的对象,并指定WebService的命名空间和调用的方法名
-                            SoapObject request = new SoapObject(WEBSERVICE_NAMESPACE, METHOD_NAME);
+                            SoapObject request = new SoapObject(WebService.WEBSERVICE_NAMESPACE, WebService.METHOD_NAME_LOGIN);
 
                             //设置调用方法的参数值,添加加密后的用户名与密码
                             request.addProperty("encryptedUserName", encryptedUserName);
                             request.addProperty("encryptedUserPassword", encryptedUserPassword);
 
                             //创建HttpTransportSE对象,并通过HttpTransportSE类的构造方法指定Webservice的WSDL文档的URL
-                            HttpTransportSE ht = new HttpTransportSE(WEBSERVICE_WSDL_URL, 1000);
+                            HttpTransportSE ht = new HttpTransportSE(WebService.WEBSERVICE_WSDL_URL, 1000);
 
                             //生成调用WebService方法的SOAP请求消息,该信息由SoapSerializationEnvelope描述
                             //SOAP版本号为1.1
@@ -259,4 +222,31 @@ public class LoginActivity extends BaseActivity {
         });
     }
 
+    final Handler loginHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case SHOW_LOGIN_SUCCESS_IN_TEXTVIEW:
+                    //显示登录成功
+                    Toast.makeText(getApplicationContext(), "登陆成功", Toast.LENGTH_SHORT).show();
+                    break;
+                case SHOW_LOGIN_FAILED_IN_TEXTVIEW:
+                    //显示登录失败
+                    Toast.makeText(getApplicationContext(), "登录失败,用户名或密码错误", Toast.LENGTH_SHORT).show();
+                    break;
+                case SHOW_SOCKET_TIMEOUT:
+                    //显示连接超时
+                    Toast.makeText(getApplicationContext(), "连接超时,请检查网络连接", Toast.LENGTH_SHORT).show();
+                    break;
+                case JUMP_TO_USER_ACTIVITY:
+                    Intent intent_User = new Intent(LoginActivity.this, UserActivity.class);
+                    startActivity(intent_User);
+                    //结束全部活动除了用户界面
+                    ActivityCollector.finishAll();
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
 }
