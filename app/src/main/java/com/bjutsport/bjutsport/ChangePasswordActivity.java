@@ -76,7 +76,6 @@ public class ChangePasswordActivity extends BaseActivity {
         
         /** 
          * 控件绑定
-         * Handler定义
          * Bundle定义 
          * */
 
