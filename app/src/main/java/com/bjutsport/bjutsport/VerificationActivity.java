@@ -39,15 +39,6 @@ public class VerificationActivity extends BaseActivity implements OnClickListene
      * 静态常量
      */
 
-    //AES密钥
-    private static final String AES_KEY = "BJUTSport1234567";
-    //注册界面URL
-    private static final String WEBSERVICE_WSDL_URL = "http://192.168.1.101:8080/BJUTSport/services/RegisterImplPort?wsdl";
-    //注册界面NameSpace
-    private static final String WEBSERVICE_NAMESPACE = "http://register.bjutsport.com/";
-    //验证验证码界面方法名称:validateUsername
-    private static final String METHOD_NAME = "validateUsername";
-
     //显示手机号已经注册
     private static final int SHOW_PHONE_NUMBER_ALREADY_EXIST = 0x0000;
     //显示手机号不存在
@@ -183,16 +174,16 @@ public class VerificationActivity extends BaseActivity implements OnClickListene
                         if (judgePhoneNums(phoneNums)) {
                             try {
                                 //加密用户输入的用户名
-                                String encryptedUserName = AESUtil.encrypt(AES_KEY, phoneNums);
+                                String encryptedUserName = AESUtil.encrypt(WebService.AES_KEY, phoneNums);
 
                                 //创建一个SoapObject的对象,并指定WebService的命名空间和调用的方法名
-                                SoapObject ruquest = new SoapObject(WEBSERVICE_NAMESPACE, METHOD_NAME);
+                                SoapObject ruquest = new SoapObject(WebService.WEBSERVICE_NAMESPACE, WebService.METHOD_NAME_VALIDATE_USERNAME);
 
                                 //设置调用方法的参数值,添加加密后的用户名与密码
                                 ruquest.addProperty("encryptedUserName", encryptedUserName);
 
                                 //创建HttpTransportSE对象,并通过HttpTransportSE类的构造方法指定Webservice的WSDL文档的URL
-                                HttpTransportSE ht = new HttpTransportSE(WEBSERVICE_WSDL_URL, 1000);
+                                HttpTransportSE ht = new HttpTransportSE(WebService.WEBSERVICE_WSDL_URL, 1000);
 
                                 //生成调用WebService方法的SOAP请求消息,该信息由SoapSerializationEnvelope描述
                                 //SOAP版本号为1.1

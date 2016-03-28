@@ -27,15 +27,6 @@ public class ChangePasswordActivity extends BaseActivity {
      * 常量定义
      * */
 
-    //AES密钥
-    private static final String AES_KEY = "BJUTSport1234567";
-    //忘记密码界面URL
-    private static final String WEBSERVICE_WSDL_URL = "http://192.168.1.101:8080/BJUTSport/services/RegisterImplPort?wsdl";
-    //忘记密码界面域名
-    private static final String WEBSERVICE_NAMESPACE = "http://register.bjutsport.com/";
-    //忘记密码界面方法名称：changePassword
-    private static final String METHOD_NAME = "changePassword";
-
     //显示密码前后不一致
     private static final int SHOW_PASSWORD_INCONSISTENT = 0x0000;
     //显示更改成功
@@ -94,44 +85,9 @@ public class ChangePasswordActivity extends BaseActivity {
         //获取注册按钮
         button_commit = (Button) findViewById(R.id.Button_ChangePassword_Verification);
         //Register的Handler
-        final Handler registerHandler = new Handler() {
-            @Override
-            public void handleMessage(Message msg) {
-                switch (msg.what) {
-                    case SHOW_PASSWORD_TOO_SHORT:
-                        //显示密码太短
-                        Toast.makeText(getApplicationContext(), "密码长度应至少大于8", Toast.LENGTH_SHORT).show();
-                        break;
-                    case SHOW_PASSWORD_INCONSISTENT:
-                        //显示密码前后不一致
-                        Toast.makeText(getApplicationContext(), "密码前后不一致", Toast.LENGTH_SHORT).show();
-                        break;
-                    case SHOW_CHANGE_SUCCESS:
-                        //显示修改成功
-                        Toast.makeText(getApplicationContext(), "修改成功", Toast.LENGTH_SHORT).show();
-                        break;
-                    case SHOW_CHANGE_FAILED:
-                        //显示注册失败
-                        Toast.makeText(getApplicationContext(), "修改失败", Toast.LENGTH_SHORT).show();
-                        break;
-                    case SHOW_SOCKET_TIMEOUT:
-                        //显示连接超时
-                        Toast.makeText(getApplicationContext(), "连接超时,请检查网络连接", Toast.LENGTH_SHORT).show();
-                        break;
-                    case JUMP_TO_LOGIN_ACTIVITY:
-                        //跳转到用户界面
-                        Intent intent_User = new Intent(ChangePasswordActivity.this, LoginActivity.class);
-                        startActivity(intent_User);
-                        finish();
-                        break;
-                    default:
-                        break;
-                }
-            }
-        };
+
         //从VerificationActivity接收用户输入的手机号
         final Bundle bundle = this.getIntent().getExtras();
-
 
         /** 
          * UI设定
@@ -202,8 +158,8 @@ public class ChangePasswordActivity extends BaseActivity {
                                  * */
                             
                                 //加密用户输入的用户名和密码
-                                String encryptedUserName = AESUtil.encrypt(AES_KEY, strUserName);
-                                String encryptedUserPassword = AESUtil.encrypt(AES_KEY, strUserPassword);
+                                String encryptedUserName = AESUtil.encrypt(WebService.AES_KEY, strUserName);
+                                String encryptedUserPassword = AESUtil.encrypt(WebService.AES_KEY, strUserPassword);
 
 
                                 /**
@@ -211,14 +167,14 @@ public class ChangePasswordActivity extends BaseActivity {
                                  * */
 
                                 //创建一个SoapObject的对象,并指定WebService的命名空间和调用的方法名
-                                SoapObject request = new SoapObject(WEBSERVICE_NAMESPACE, METHOD_NAME);
+                                SoapObject request = new SoapObject(WebService.WEBSERVICE_NAMESPACE, WebService.METHOD_NAME_CHANGE_PASSWORD);
 
                                 //设置调用方法的参数值,添加加密后的用户名与密码
                                 request.addProperty("encryptedUserName", encryptedUserName);
                                 request.addProperty("encryptedUserPassword", encryptedUserPassword);
 
                                 //创建HttpTransportSE对象,并通过HttpTransportSE类的构造方法指定Webservice的WSDL文档的URL
-                                HttpTransportSE ht = new HttpTransportSE(WEBSERVICE_WSDL_URL, 1000);
+                                HttpTransportSE ht = new HttpTransportSE(WebService.WEBSERVICE_WSDL_URL, 1000);
 
                                 //生成调用WebService方法的SOAP请求消息,该信息由SoapSerializationEnvelope描述
                                 //SOAP版本号为1.1
@@ -274,6 +230,41 @@ public class ChangePasswordActivity extends BaseActivity {
         });
     }
 
+    final Handler registerHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case SHOW_PASSWORD_TOO_SHORT:
+                    //显示密码太短
+                    Toast.makeText(getApplicationContext(), "密码长度应至少大于8", Toast.LENGTH_SHORT).show();
+                    break;
+                case SHOW_PASSWORD_INCONSISTENT:
+                    //显示密码前后不一致
+                    Toast.makeText(getApplicationContext(), "密码前后不一致", Toast.LENGTH_SHORT).show();
+                    break;
+                case SHOW_CHANGE_SUCCESS:
+                    //显示修改成功
+                    Toast.makeText(getApplicationContext(), "修改成功", Toast.LENGTH_SHORT).show();
+                    break;
+                case SHOW_CHANGE_FAILED:
+                    //显示注册失败
+                    Toast.makeText(getApplicationContext(), "修改失败", Toast.LENGTH_SHORT).show();
+                    break;
+                case SHOW_SOCKET_TIMEOUT:
+                    //显示连接超时
+                    Toast.makeText(getApplicationContext(), "连接超时,请检查网络连接", Toast.LENGTH_SHORT).show();
+                    break;
+                case JUMP_TO_LOGIN_ACTIVITY:
+                    //跳转到用户界面
+                    Intent intent_User = new Intent(ChangePasswordActivity.this, LoginActivity.class);
+                    startActivity(intent_User);
+                    finish();
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
 
     /**
      * 检查密码长度函数
