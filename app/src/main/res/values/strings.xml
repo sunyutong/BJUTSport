@@ -13,4 +13,5 @@
     <string name="verificate_phone_number">验证验证码</string>
     <string name="change_password">修改密码</string>
     <string name="change">修改</string>
+    <string name="search">搜索</string>
 </resources>

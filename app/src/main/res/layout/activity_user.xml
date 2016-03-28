@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:lichee="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#131313"
@@ -7,29 +8,174 @@
     android:fitsSystemWindows="true"
     android:orientation="vertical">
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:background="#131313"
-        android:orientation="horizontal">
-
-    </RelativeLayout>
-
-    <RelativeLayout
+    <com.bjutsport.view.SlidingMenu
+        android:id="@+id/Menu_UserActivity"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#e3e3e3e3"
-        android:orientation="vertical">
+        lichee:rightPadding="250dp">
 
-        <Button
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:text="返回主界面"
-            android:id="@+id/Button_Back_to_MainActivity"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true"
-            android:background="#ff0000"
-            android:textSize="16sp"
-            android:layout_alignParentEnd="false" />
-    </RelativeLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <include layout="@layout/left_menu" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#131313"
+                android:orientation="vertical">
+
+                <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:background="#131313"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="30dp"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="20dp"
+                        android:background="#131313"
+                        android:gravity="center"
+                        android:onClick="toggleMenu"
+                        android:text="？"
+                        android:textColor="#f8f8f8"
+                        android:textSize="11sp" />
+
+                    <TextView
+                        android:id="@+id/TextView_UserActivity_Title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:text="主界面"
+                        android:textColor="#f8f8f8"
+                        android:textSize="21sp" />
+
+                    <TextView
+                        android:id="@+id/TextView_UserActivity_To_SearchActivity"
+                        android:layout_width="30dp"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="20dp"
+                        android:background="#131313"
+                        android:gravity="center"
+                        android:text="!"
+                        android:textColor="#f8f8f8"
+                        android:textSize="11sp" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#131313"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="5"
+                            android:background="#fd0000"
+                            android:orientation="horizontal">
+
+                            <RelativeLayout
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="3"
+                                android:background="#f245e7">
+
+                            </RelativeLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="4"
+                                android:background="#08f5da"
+                                android:orientation="vertical">
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="4"
+                            android:background="#001efd"
+                            android:orientation="horizontal">
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+
+                                <RelativeLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="1"
+                                    android:background="#fafafa"
+                                    ></RelativeLayout>
+
+                                <RelativeLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="1"
+                                    android:background="#000000"
+                                    ></RelativeLayout>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+
+                                <RelativeLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="1"
+                                    android:background="#0015ff"></RelativeLayout>
+
+                                <RelativeLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="1"
+                                    android:background="#ff0000"></RelativeLayout>
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="3"
+                            android:background="#00f7ff">
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </com.bjutsport.view.SlidingMenu>
 </LinearLayout>
