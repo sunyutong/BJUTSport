@@ -27,8 +27,9 @@
         <activity android:name=".LoginActivity" />
         <activity android:name=".RegisterActivity" />
         <activity android:name=".UserActivity" />
+        <activity android:name=".SearchActivity"/>
         <activity android:name=".VerificationActivity" />
-        <activity android:name=".ChangePasswordActivity"></activity>
+        <activity android:name=".ChangePasswordActivity"> </activity>
     </application>
 
 </manifest>
