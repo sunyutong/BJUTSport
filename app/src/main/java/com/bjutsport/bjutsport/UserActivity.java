@@ -38,4 +38,5 @@ public class UserActivity extends Activity {
     public void toggleMenu(View view) {
         mLeftMenu.toggle();
     }
+
 }
