@@ -1,116 +1,99 @@
 package com.bjutsport.bjutsport;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.GestureDetector;
-import android.view.MotionEvent;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.view.View;
-import android.view.Window;
-import android.widget.HorizontalScrollView;
-import android.widget.TextView;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 
-import com.bjutsport.view.SlidingMenu;
-
-public class UserActivity extends BaseActivity implements View.OnTouchListener, GestureDetector.OnGestureListener{
-
-
-    //创建一个用于识别收拾的GestureDetector对象
-    private GestureDetector detector = new GestureDetector(this);
-    //滑动菜单
-    private SlidingMenu userLayout;
-    //搜索按钮
-    TextView textViewSearch;
+public class UserActivity extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_user);
-        userLayout = (SlidingMenu)findViewById(R.id.Menu_UserActivity);
-        textViewSearch= (TextView) findViewById(R.id.TextView_UserActivity_To_SearchActivity);
-        textViewSearch.setOnClickListener(new View.OnClickListener() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                Intent intent_search = new Intent(UserActivity.this, SearchActivity.class);
-                startActivity(intent_search);
+            public void onClick(View view) {
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
             }
         });
 
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
 
-        userLayout.setOnTouchListener(this);
-        userLayout.setLongClickable(true);
-        detector.setIsLongpressEnabled(true);
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
     }
 
-
-    public void toggleMenu(View view) {
-        userLayout.toggle();
-    }
-
-    //重写OnTouchListener的onTouch方法
-    //此方法在触摸屏被触摸，即发生触摸事件（接触和抚摸两个事件，挺形象）的时候被调用。
     @Override
-    public boolean onTouch(View v, MotionEvent event) {
-        detector.onTouchEvent(event);
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.user, menu);
         return true;
     }
 
-    //在按下动作时被调用
     @Override
-    public boolean onDown(MotionEvent e) {
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
 
-        return false;
-    }
-
-    //在抛掷动作时被调用
-    @Override
-    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
-                           float velocityY) {
-        //velocityX表示横向的移动，根据手指移动的方向切换女孩
-        if(velocityX < 0){
-            userLayout.closeMenu();
-        }else if (velocityX > 0){
-            userLayout.openMenu();
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
         }
-        return false;
+
+        return super.onOptionsItemSelected(item);
     }
 
-    //在长按时被调用
+    @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public void onLongPress(MotionEvent e) {
-    }
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
 
-    //在滚动时调用
-    @Override
-    public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
-                            float distanceY) {
-        return false;
-    }
+        if (id == R.id.nav_user) {
+            // Handle the camera action
+        } else if (id == R.id.nav_users) {
 
-    //在按住时被调用
-    @Override
-    public void onShowPress(MotionEvent e) {
-    }
+        } else if (id == R.id.nav_manage) {
 
-    //在抬起时被调用
-    @Override
-    public boolean onSingleTapUp(MotionEvent e) {
-        if(inRangeOfView(userLayout.mContent,e)){
-            userLayout.closeMenu();
+        } else if (id == R.id.nav_share) {
+
+        } else if (id == R.id.nav_send) {
+
         }
-        return false;
-    }
 
-    //判断点击的位置是不是在Content上
-    private boolean inRangeOfView(View view, MotionEvent ev){
-        int[] location = new int[2];
-        view.getLocationOnScreen(location);
-        int x = location[0];
-        int y = location[1];
-        if(ev.getX() < x || ev.getX() > (x + view.getWidth()) || ev.getY() < y || ev.getY() > (y + view.getHeight())){
-            return false;
-        }
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
 }
