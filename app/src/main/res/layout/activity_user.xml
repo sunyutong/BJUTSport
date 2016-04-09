@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:lichee="http://schemas.android.com/apk/res-auto"
+
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#131313"
@@ -12,8 +13,8 @@
         android:id="@+id/Menu_UserActivity"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        lichee:rightPadding="250dp">
-
+        lichee:rightPadding="200dp">
+        <!-- 上面这就是自定义属性-->
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -75,101 +76,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="#131313"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:id="@+id/RelativeLayout_UserActivity">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            android:layout_weight="5"
-                            android:background="#fd0000"
-                            android:orientation="horizontal">
-
-                            <RelativeLayout
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:layout_weight="3"
-                                android:background="#f245e7">
-
-                            </RelativeLayout>
-
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:layout_weight="4"
-                                android:background="#08f5da"
-                                android:orientation="vertical">
-
-                            </LinearLayout>
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            android:layout_weight="4"
-                            android:background="#001efd"
-                            android:orientation="horizontal">
-
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:layout_weight="1"
-                                android:orientation="vertical">
-
-                                <RelativeLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="0dp"
-                                    android:layout_weight="1"
-                                    android:background="#fafafa"
-                                    ></RelativeLayout>
-
-                                <RelativeLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="0dp"
-                                    android:layout_weight="1"
-                                    android:background="#000000"
-                                    ></RelativeLayout>
-
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:layout_weight="1"
-                                android:orientation="vertical">
-
-                                <RelativeLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="0dp"
-                                    android:layout_weight="1"
-                                    android:background="#0015ff"></RelativeLayout>
-
-                                <RelativeLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="0dp"
-                                    android:layout_weight="1"
-                                    android:background="#ff0000"></RelativeLayout>
-
-                            </LinearLayout>
-
-                        </LinearLayout>
-
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            android:layout_weight="3"
-                            android:background="#00f7ff">
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-
+                    <ImageView android:id="@+id/image"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        />
 
                 </RelativeLayout>
 
