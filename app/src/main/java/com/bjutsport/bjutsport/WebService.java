@@ -7,7 +7,7 @@ class WebService {
     //AES密钥
     static final String AES_KEY = "BJUTSport1234567";
     //登录界面URL
-    static final String WEBSERVICE_WSDL_URL = "http://192.168.1.101:8080/BJUTSport/services/BJUTSportWebServiceImplPort?wsdl";
+    static final String WEBSERVICE_WSDL_URL = "http://192.168.100.102:8080/BJUTSport/services/BJUTSportWebServiceImplPort?wsdl";
     //登录界面域名
     static final String WEBSERVICE_NAMESPACE = "http://bjutsport.com/";
     //登录界面方法名称:login

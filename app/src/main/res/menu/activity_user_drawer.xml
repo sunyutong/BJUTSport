@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_user"
+            android:icon="@drawable/icon_user"
+            android:title="个人信息" />
+        <item
+            android:id="@+id/nav_users"
+            android:icon="@drawable/icon_users"
+            android:title="组织信息" />
+        <item
+            android:id="@+id/nav_manage"
+            android:icon="@drawable/icon_wrench"
+            android:title="设置" />
+    </group>
+
+    <item android:title="JUST ENJOY LIFE AND GAME">
+        <menu>
+            <item
+                android:id="@+id/nav_share"
+                android:icon="@drawable/icon_delete"
+                android:title="清除缓存" />
+            <item
+                android:id="@+id/nav_send"
+                android:icon="@drawable/icon_call_me"
+                android:title="联系我们" />
+            <item
+                android:id="@+id/nav_sign_out"
+                android:icon="@drawable/icon_logout"
+                android:title="登出"
+                />
+        </menu>
+    </item>
+
+</menu>
