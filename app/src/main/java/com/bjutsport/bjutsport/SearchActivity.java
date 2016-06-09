@@ -1,6 +1,5 @@
 package com.bjutsport.bjutsport;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -11,7 +10,7 @@ import android.widget.Button;
  * 由UserActivity的搜索框出生，死于后退按钮
  */
 
-public class SearchActivity extends Activity {
+public class SearchActivity extends BaseActivity {
 
     Button buttonBack;
     @Override
