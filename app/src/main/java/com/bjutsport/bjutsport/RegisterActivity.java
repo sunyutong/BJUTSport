@@ -18,6 +18,9 @@ import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 
 import com.bjutsport.aes.AESUtil;
+import com.bjutsport.enums.Key;
+import com.bjutsport.enums.WSInfo;
+import com.bjutsport.enums.WSMethod;
 
 import java.net.SocketTimeoutException;
 
@@ -168,8 +171,8 @@ public class RegisterActivity extends BaseActivity {
                                  * */
 
                                 //加密用户输入的用户名和密码
-                                String encryptedUserName = AESUtil.encrypt(WebService.AES_KEY, strUserName);
-                                String encryptedUserPassword = AESUtil.encrypt(WebService.AES_KEY, strUserPassword);
+                                String encryptedUserName = AESUtil.encrypt(Key.AES.getKey(), strUserName);
+                                String encryptedUserPassword = AESUtil.encrypt(Key.AES.getKey(), strUserPassword);
 
 
                                 /**
@@ -177,14 +180,14 @@ public class RegisterActivity extends BaseActivity {
                                  * */
 
                                 //创建一个SoapObject的对象,并指定WebService的命名空间和调用的方法名
-                                SoapObject request = new SoapObject(WebService.WEBSERVICE_NAMESPACE, WebService.METHOD_NAME_REGISTER);
+                                SoapObject request = new SoapObject(WSInfo.NAMESPACE.getAddress(), WSMethod.REGISTER.getName());
 
                                 //设置调用方法的参数值,添加加密后的用户名与密码
                                 request.addProperty("encryptedUserName", encryptedUserName);
                                 request.addProperty("encryptedUserPassword", encryptedUserPassword);
 
                                 //创建HttpTransportSE对象,并通过HttpTransportSE类的构造方法指定Webservice的WSDL文档的URL
-                                HttpTransportSE ht = new HttpTransportSE(WebService.WEBSERVICE_WSDL_URL, 1000);
+                                HttpTransportSE ht = new HttpTransportSE(WSInfo.WSDL.getAddress(), 1000);
 
                                 //生成调用WebService方法的SOAP请求消息,该信息由SoapSerializationEnvelope描述
                                 //SOAP版本号为1.1

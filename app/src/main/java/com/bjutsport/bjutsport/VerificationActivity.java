@@ -24,6 +24,9 @@ import android.widget.Toast;
 import android.widget.FrameLayout.LayoutParams;
 
 import com.bjutsport.aes.AESUtil;
+import com.bjutsport.enums.Key;
+import com.bjutsport.enums.WSInfo;
+import com.bjutsport.enums.WSMethod;
 
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.SoapObject;
@@ -175,16 +178,16 @@ public class VerificationActivity extends BaseActivity implements OnClickListene
                         if (judgePhoneNums(phoneNums)) {
                             try {
                                 //加密用户输入的用户名
-                                String encryptedUserName = AESUtil.encrypt(WebService.AES_KEY, phoneNums);
+                                String encryptedUserName = AESUtil.encrypt(Key.AES.getKey(), phoneNums);
 
                                 //创建一个SoapObject的对象,并指定WebService的命名空间和调用的方法名
-                                SoapObject ruquest = new SoapObject(WebService.WEBSERVICE_NAMESPACE, WebService.METHOD_NAME_VALIDATE_USERNAME);
+                                SoapObject ruquest = new SoapObject(WSInfo.NAMESPACE.getAddress(), WSMethod.VALIDATE_USERNAME.getName());
 
                                 //设置调用方法的参数值,添加加密后的用户名与密码
                                 ruquest.addProperty("encryptedUserName", encryptedUserName);
 
                                 //创建HttpTransportSE对象,并通过HttpTransportSE类的构造方法指定Webservice的WSDL文档的URL
-                                HttpTransportSE ht = new HttpTransportSE(WebService.WEBSERVICE_WSDL_URL, 1000);
+                                HttpTransportSE ht = new HttpTransportSE(WSInfo.WSDL.getAddress(), 1000);
 
                                 //生成调用WebService方法的SOAP请求消息,该信息由SoapSerializationEnvelope描述
                                 //SOAP版本号为1.1
