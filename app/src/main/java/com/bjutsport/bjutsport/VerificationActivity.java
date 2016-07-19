@@ -27,6 +27,7 @@ import com.bjutsport.aes.AESUtil;
 import com.bjutsport.enums.Key;
 import com.bjutsport.enums.WSInfo;
 import com.bjutsport.enums.WSMethod;
+import com.bjutsport.netapi.UserAPI;
 
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.SoapObject;
@@ -177,36 +178,10 @@ public class VerificationActivity extends BaseActivity implements OnClickListene
                         String phoneNums = inputPhoneEt.getText().toString();
                         if (judgePhoneNums(phoneNums)) {
                             try {
-                                //加密用户输入的用户名
-                                String encryptedUserName = AESUtil.encrypt(Key.AES.getKey(), phoneNums);
 
-                                //创建一个SoapObject的对象,并指定WebService的命名空间和调用的方法名
-                                SoapObject ruquest = new SoapObject(WSInfo.NAMESPACE.getAddress(), WSMethod.VALIDATE_USERNAME.getName());
+                                int validateResult = new UserAPI().validate(phoneNums);
 
-                                //设置调用方法的参数值,添加加密后的用户名与密码
-                                ruquest.addProperty("encryptedUserName", encryptedUserName);
-
-                                //创建HttpTransportSE对象,并通过HttpTransportSE类的构造方法指定Webservice的WSDL文档的URL
-                                HttpTransportSE ht = new HttpTransportSE(WSInfo.WSDL.getAddress(), 1000);
-
-                                //生成调用WebService方法的SOAP请求消息,该信息由SoapSerializationEnvelope描述
-                                //SOAP版本号为1.1
-                                SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
-
-                                //设置bodyOut属性为SoapObject对象request
-                                envelope.bodyOut = ruquest;
-                                envelope.setOutputSoapObject(ruquest);
-
-                                //使用call方法调用WebService方法
-                                ht.call(null, envelope);
-
-                                //获取返回值
-                                SoapObject returnedValue = (SoapObject) envelope.bodyIn;
-
-                                //解析返回结果
-                                int result = Integer.parseInt(returnedValue.getPropertyAsString(0));
-
-                                switch (result) {
+                                switch (validateResult) {
                                     case VALIDATE_NOT_EXIST:
                                         if (state.equals("register")) {
                                             //发送验证码请求
