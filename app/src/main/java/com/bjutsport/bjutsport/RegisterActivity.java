@@ -21,6 +21,7 @@ import com.bjutsport.aes.AESUtil;
 import com.bjutsport.enums.Key;
 import com.bjutsport.enums.WSInfo;
 import com.bjutsport.enums.WSMethod;
+import com.bjutsport.netapi.UserAPI;
 
 import java.net.SocketTimeoutException;
 
@@ -165,57 +166,9 @@ public class RegisterActivity extends BaseActivity {
                             //否则进行注册
                             try {
 
+                                int registerResult = new UserAPI().register(strUserPassword, strUserPassword);
 
-                                /**
-                                 * 对用户名和密码进行AES加密
-                                 * */
-
-                                //加密用户输入的用户名和密码
-                                String encryptedUserName = AESUtil.encrypt(Key.AES.getKey(), strUserName);
-                                String encryptedUserPassword = AESUtil.encrypt(Key.AES.getKey(), strUserPassword);
-
-
-                                /**
-                                 * 向服务器发送数据
-                                 * */
-
-                                //创建一个SoapObject的对象,并指定WebService的命名空间和调用的方法名
-                                SoapObject request = new SoapObject(WSInfo.NAMESPACE.getAddress(), WSMethod.REGISTER.getName());
-
-                                //设置调用方法的参数值,添加加密后的用户名与密码
-                                request.addProperty("encryptedUserName", encryptedUserName);
-                                request.addProperty("encryptedUserPassword", encryptedUserPassword);
-
-                                //创建HttpTransportSE对象,并通过HttpTransportSE类的构造方法指定Webservice的WSDL文档的URL
-                                HttpTransportSE ht = new HttpTransportSE(WSInfo.WSDL.getAddress(), 1000);
-
-                                //生成调用WebService方法的SOAP请求消息,该信息由SoapSerializationEnvelope描述
-                                //SOAP版本号为1.1
-                                SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
-
-                                //设置bodyOut属性为SoapObject对象request
-                                envelope.bodyOut = request;
-                                envelope.setOutputSoapObject(request);
-
-                                //使用call方法调用WebService方法
-                                ht.call(null, envelope);
-
-
-                                /**
-                                 * 从服务器收取数据
-                                 * */
-
-                                //获取返回值
-                                SoapObject returnedValue = (SoapObject) envelope.bodyIn;
-                                //解析返回结果
-                                int result = Integer.parseInt(returnedValue.getPropertyAsString(0));
-
-
-                                /**
-                                 * 对返回数据进行处理
-                                 * */
-
-                                switch (result) {
+                                switch (registerResult) {
                                     case REGISTER_SUCCESS:
                                         //如果服务器返回值为true,则发送消息以显示注册成功
                                         registerHandler.sendEmptyMessage(SHOW_REGISTER_SUCCESS);
